@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Environment ###
+.env
+
+### Docker ###
+postgres_data/
+
+### MacOS ###
+.DS_Store

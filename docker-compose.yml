@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sourceme-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sourceme}
+      POSTGRES_USER: ${POSTGRES_USER:-sourceme_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sourceme_password}
+      TZ: Asia/Seoul
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sourceme_user} -d ${POSTGRES_DB:-sourceme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sourceme-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  sourceme-network:
+    driver: bridge
