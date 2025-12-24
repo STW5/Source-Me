@@ -1,9 +1,9 @@
 package com.stw.sourceme.profile.controller;
 
 import com.stw.sourceme.common.ApiResponse;
-import com.stw.sourceme.profile.controller.dto.SiteProfileCreateRequest;
-import com.stw.sourceme.profile.controller.dto.SiteProfileResponse;
-import com.stw.sourceme.profile.service.SiteProfileService;
+import com.stw.sourceme.profile.controller.dto.ProfileCreateRequest;
+import com.stw.sourceme.profile.controller.dto.ProfileResponse;
+import com.stw.sourceme.profile.service.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/profile")
 @RequiredArgsConstructor
-public class SiteProfileController {
+public class ProfileController {
 
-    private final SiteProfileService siteProfileService;
+    private final ProfileService profileService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<SiteProfileResponse>> getProfile() {
-        SiteProfileResponse data = siteProfileService.getProfile();
+    public ResponseEntity<ApiResponse<ProfileResponse>> getProfile() {
+        ProfileResponse data = profileService.getProfile();
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<SiteProfileResponse>> setProfile(
-            @Valid @RequestBody SiteProfileCreateRequest request
+    public ResponseEntity<ApiResponse<ProfileResponse>> setProfile(
+            @Valid @RequestBody ProfileCreateRequest request
     ) {
-        SiteProfileResponse data = siteProfileService.setProfile(request);
+        ProfileResponse data = profileService.setProfile(request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 }

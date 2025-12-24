@@ -29,9 +29,9 @@ COMMENT ON COLUMN users.created_at IS '생성일시';
 COMMENT ON COLUMN users.updated_at IS '수정일시';
 
 -- ============================================================
--- 2) site_profile (메인 소개 데이터)
+-- 2) profile (메인 소개 데이터)
 -- ============================================================
-CREATE TABLE site_profile (
+CREATE TABLE profile (
     id BIGSERIAL PRIMARY KEY,
     display_name VARCHAR(100) NOT NULL,
     headline VARCHAR(200) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE site_profile (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-COMMENT ON TABLE site_profile IS '메인 소개 데이터 (1행만 사용)';
+COMMENT ON TABLE profile IS '메인 소개 데이터 (1행만 사용)';
 
 -- ============================================================
 -- 3) media_file (업로드 파일 메타)

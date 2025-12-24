@@ -2,10 +2,10 @@ package com.stw.sourceme.profile.service;
 
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
-import com.stw.sourceme.profile.controller.dto.SiteProfileCreateRequest;
-import com.stw.sourceme.profile.controller.dto.SiteProfileResponse;
+import com.stw.sourceme.profile.controller.dto.ProfileCreateRequest;
+import com.stw.sourceme.profile.controller.dto.ProfileResponse;
 import com.stw.sourceme.profile.entity.SiteProfile;
-import com.stw.sourceme.profile.repository.SiteProfileRepository;
+import com.stw.sourceme.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,26 +13,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SiteProfileService {
+public class ProfileService {
 
-    private final SiteProfileRepository siteProfileRepository;
+    private final ProfileRepository profileRepository;
 
-    public SiteProfileResponse getProfile() {
-        SiteProfile profile = siteProfileRepository.findAll().stream()
+    public ProfileResponse getProfile() {
+        SiteProfile profile = profileRepository.findAll().stream()
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
 
-        return SiteProfileResponse.from(profile);
+        return ProfileResponse.from(profile);
     }
 
     @Transactional
-    public SiteProfileResponse setProfile(SiteProfileCreateRequest request) {
-        SiteProfile profile = siteProfileRepository.findAll().stream()
+    public ProfileResponse setProfile(ProfileCreateRequest request) {
+        SiteProfile profile = profileRepository.findAll().stream()
                 .findFirst()
                 .orElse(null);
 
         if (profile == null) {
-            profile = siteProfileRepository.save(request.toEntity());
+            profile = profileRepository.save(request.toEntity());
         } else {
             profile.update(
                     request.getDisplayName(),
@@ -45,6 +45,6 @@ public class SiteProfileService {
             );
         }
 
-        return SiteProfileResponse.from(profile);
+        return ProfileResponse.from(profile);
     }
 }

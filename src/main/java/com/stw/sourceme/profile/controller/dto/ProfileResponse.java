@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SiteProfileResponse {
+public class ProfileResponse {
 
     private Long id;
     private String displayName;
@@ -17,8 +17,8 @@ public class SiteProfileResponse {
     private String linkedinUrl;
     private String resumeUrl;
 
-    public static SiteProfileResponse from(SiteProfile siteProfile) {
-        return SiteProfileResponse.builder()
+    public static ProfileResponse from(SiteProfile siteProfile) {
+        return ProfileResponse.builder()
                 .id(siteProfile.getId())
                 .displayName(siteProfile.getDisplayName())
                 .headline(siteProfile.getHeadline())
