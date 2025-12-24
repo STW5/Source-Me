@@ -3,13 +3,17 @@ package com.stw.sourceme.profile.entity;
 import com.stw.sourceme.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "site_profile")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SiteProfile extends BaseEntity {
 
     @Id
@@ -36,4 +40,22 @@ public class SiteProfile extends BaseEntity {
 
     @Column(name = "resume_url", length = 255)
     private String resumeUrl;
+
+    public void update(
+            String displayName,
+            String headline,
+            String bioMarkdown,
+            String email,
+            String githubUrl,
+            String linkedinUrl,
+            String resumeUrl
+    ) {
+        this.displayName = displayName;
+        this.headline = headline;
+        this.bioMarkdown = bioMarkdown;
+        this.email = email;
+        this.githubUrl = githubUrl;
+        this.linkedinUrl = linkedinUrl;
+        this.resumeUrl = resumeUrl;
+    }
 }
