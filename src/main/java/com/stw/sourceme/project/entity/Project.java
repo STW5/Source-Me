@@ -3,16 +3,16 @@ package com.stw.sourceme.project.entity;
 import com.stw.sourceme.common.BaseEntity;
 import com.stw.sourceme.media.entity.MediaFile;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "project")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Project extends BaseEntity {
 
     @Id
@@ -55,4 +55,20 @@ public class Project extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
+
+    public void update(String title, String slug, String summary, String contentMarkdown,
+                      LocalDate startedAt, LocalDate endedAt, Boolean isPublished, Boolean isFeatured,
+                      Integer featuredOrder, String githubUrl, String demoUrl) {
+        this.title = title;
+        this.slug = slug;
+        this.summary = summary;
+        this.contentMarkdown = contentMarkdown;
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+        this.isPublished = isPublished;
+        this.isFeatured = isFeatured;
+        this.featuredOrder = featuredOrder;
+        this.githubUrl = githubUrl;
+        this.demoUrl = demoUrl;
+    }
 }
