@@ -17,7 +17,13 @@ public enum ErrorCode {
 
     // Project
     PROJECT_NOT_FOUND("PROJECT_001", "프로젝트를 찾을 수 없습니다."),
-    PROJECT_SLUG_ALREADY_EXISTS("PROJECT_002", "이미 존재하는 슬러그입니다.");
+    PROJECT_SLUG_ALREADY_EXISTS("PROJECT_002", "이미 존재하는 슬러그입니다."),
+
+    // Auth
+    INVALID_CREDENTIALS("AUTH_001", "아이디 또는 비밀번호가 올바르지 않습니다."),
+    USER_DISABLED("AUTH_002", "비활성화된 계정입니다."),
+    UNAUTHORIZED("AUTH_003", "인증이 필요합니다."),
+    INVALID_TOKEN("AUTH_004", "유효하지 않은 토큰입니다.");
 
     private final String code;
     private final String message;
