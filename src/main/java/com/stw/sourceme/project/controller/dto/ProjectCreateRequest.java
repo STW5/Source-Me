@@ -25,7 +25,6 @@ public class ProjectCreateRequest {
     @Size(max = 300, message = "요약은 300자 이하여야 합니다.")
     private String summary;
 
-    @NotBlank(message = "내용은 필수입니다.")
     private String contentMarkdown;
 
     private LocalDate startedAt;
