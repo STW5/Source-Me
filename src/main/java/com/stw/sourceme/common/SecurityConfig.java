@@ -38,11 +38,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/profile").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects", "/api/v1/projects/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/blog/posts", "/api/blog/posts/**").permitAll()
 
                         // Protected endpoints (require authentication)
                         .requestMatchers(HttpMethod.POST, "/api/v1/projects").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/projects/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/blog/posts").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/blog/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/blog/posts/**").authenticated()
+                        .requestMatchers("/api/blog/admin/**").authenticated()
 
                         .anyRequest().authenticated()
                 )

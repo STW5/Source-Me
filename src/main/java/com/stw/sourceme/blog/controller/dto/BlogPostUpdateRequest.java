@@ -1,0 +1,29 @@
+package com.stw.sourceme.blog.controller.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class BlogPostUpdateRequest {
+
+    @NotBlank(message = "제목은 필수입니다.")
+    @Size(max = 200, message = "제목은 200자 이하여야 합니다.")
+    private String title;
+
+    @NotBlank(message = "슬러그는 필수입니다.")
+    @Size(max = 220, message = "슬러그는 220자 이하여야 합니다.")
+    private String slug;
+
+    @Size(max = 300, message = "요약은 300자 이하여야 합니다.")
+    private String summary;
+
+    @NotBlank(message = "본문은 필수입니다.")
+    private String contentMarkdown;
+
+    @NotBlank(message = "상태는 필수입니다.")
+    @Size(max = 20, message = "상태는 20자 이하여야 합니다.")
+    private String status; // DRAFT or PUBLISHED
+}

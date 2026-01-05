@@ -3,9 +3,7 @@ package com.stw.sourceme.blog.entity;
 import com.stw.sourceme.common.BaseEntity;
 import com.stw.sourceme.media.entity.MediaFile;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 
@@ -13,6 +11,8 @@ import java.time.OffsetDateTime;
 @Table(name = "blog_post")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class BlogPost extends BaseEntity {
 
     @Id
@@ -40,4 +40,15 @@ public class BlogPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
+
+    public void update(String title, String slug, String summary, String contentMarkdown, String status) {
+        this.title = title;
+        this.slug = slug;
+        this.summary = summary;
+        this.contentMarkdown = contentMarkdown;
+        this.status = status;
+        if ("PUBLISHED".equals(status) && this.publishedAt == null) {
+            this.publishedAt = OffsetDateTime.now();
+        }
+    }
 }
