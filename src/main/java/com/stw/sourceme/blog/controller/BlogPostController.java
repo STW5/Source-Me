@@ -23,15 +23,27 @@ public class BlogPostController {
 
     // 공개된 게시글 목록 조회 (public)
     @GetMapping("/posts")
-    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getPublishedPosts() {
-        List<BlogPostListResponse> posts = blogPostService.getAllPublishedPosts();
+    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getPublishedPosts(
+            @RequestParam(required = false) String tag) {
+        List<BlogPostListResponse> posts;
+        if (tag != null && !tag.isEmpty()) {
+            posts = blogPostService.getPostsByTag(tag);
+        } else {
+            posts = blogPostService.getAllPublishedPosts();
+        }
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 
     // 모든 게시글 목록 조회 (관리자용)
     @GetMapping("/admin/posts")
-    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getAllPosts() {
-        List<BlogPostListResponse> posts = blogPostService.getAllPosts();
+    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getAllPosts(
+            @RequestParam(required = false) String tag) {
+        List<BlogPostListResponse> posts;
+        if (tag != null && !tag.isEmpty()) {
+            posts = blogPostService.getAllPostsByTag(tag);
+        } else {
+            posts = blogPostService.getAllPosts();
+        }
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 

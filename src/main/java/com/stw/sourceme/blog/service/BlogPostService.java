@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,6 +42,21 @@ public class BlogPostService {
                 .collect(Collectors.toList());
     }
 
+    // 태그별 게시글 조회 (public)
+    public List<BlogPostListResponse> getPostsByTag(String tagName) {
+        return blogPostRepository.findByTagName(tagName).stream()
+                .filter(post -> "PUBLISHED".equals(post.getStatus()))
+                .map(BlogPostListResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    // 태그별 게시글 조회 (관리자용)
+    public List<BlogPostListResponse> getAllPostsByTag(String tagName) {
+        return blogPostRepository.findByTagName(tagName).stream()
+                .map(BlogPostListResponse::from)
+                .collect(Collectors.toList());
+    }
+
     // ID로 조회
     public BlogPostResponse getPostById(UUID id) {
         BlogPost blogPost = blogPostRepository.findById(id)
@@ -53,14 +69,27 @@ public class BlogPostService {
     public BlogPostResponse createPost(BlogPostCreateRequest request) {
         BlogPost blogPost = request.toEntity();
 
-        // 태그 연결
-        if (request.getTagIds() != null && !request.getTagIds().isEmpty()) {
-            List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+        // 태그 연결 (없으면 자동 생성)
+        if (request.getTagNames() != null && !request.getTagNames().isEmpty()) {
+            List<Tag> tags = getOrCreateTags(request.getTagNames());
             blogPost.updateTags(tags);
         }
 
         blogPost = blogPostRepository.save(blogPost);
         return BlogPostResponse.from(blogPost);
+    }
+
+    private List<Tag> getOrCreateTags(List<String> tagNames) {
+        List<Tag> tags = new ArrayList<>();
+        for (String tagName : tagNames) {
+            String trimmedName = tagName.trim();
+            if (!trimmedName.isEmpty()) {
+                Tag tag = tagRepository.findByName(trimmedName)
+                        .orElseGet(() -> tagRepository.save(Tag.builder().name(trimmedName).build()));
+                tags.add(tag);
+            }
+        }
+        return tags;
     }
 
     // 게시글 수정
@@ -76,9 +105,9 @@ public class BlogPostService {
                 request.getStatus()
         );
 
-        // 태그 업데이트
-        if (request.getTagIds() != null) {
-            List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+        // 태그 업데이트 (없으면 자동 생성)
+        if (request.getTagNames() != null) {
+            List<Tag> tags = getOrCreateTags(request.getTagNames());
             blogPost.updateTags(tags);
         }
 

@@ -1,6 +1,6 @@
 package com.stw.sourceme.tag.controller;
 
-import com.stw.sourceme.common.response.ApiResponse;
+import com.stw.sourceme.common.ApiResponse;
 import com.stw.sourceme.tag.controller.dto.TagCreateRequest;
 import com.stw.sourceme.tag.controller.dto.TagResponse;
 import com.stw.sourceme.tag.controller.dto.TagUpdateRequest;

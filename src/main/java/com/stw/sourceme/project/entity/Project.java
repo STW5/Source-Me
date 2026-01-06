@@ -2,10 +2,13 @@ package com.stw.sourceme.project.entity;
 
 import com.stw.sourceme.common.BaseEntity;
 import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -56,6 +59,15 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
 
+    @ManyToMany
+    @JoinTable(
+            name = "project_tag",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @Builder.Default
+    private List<Tag> tags = new ArrayList<>();
+
     public void update(String title, String slug, String summary, String contentMarkdown,
                       LocalDate startedAt, LocalDate endedAt, Boolean isPublished, Boolean isFeatured,
                       Integer featuredOrder, String githubUrl, String demoUrl) {
@@ -70,5 +82,10 @@ public class Project extends BaseEntity {
         this.featuredOrder = featuredOrder;
         this.githubUrl = githubUrl;
         this.demoUrl = demoUrl;
+    }
+
+    public void updateTags(List<Tag> tags) {
+        this.tags.clear();
+        this.tags.addAll(tags);
     }
 }

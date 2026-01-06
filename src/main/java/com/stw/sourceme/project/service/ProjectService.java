@@ -9,10 +9,13 @@ import com.stw.sourceme.project.controller.dto.ProjectResponse;
 import com.stw.sourceme.project.controller.dto.ProjectUpdateRequest;
 import com.stw.sourceme.project.entity.Project;
 import com.stw.sourceme.project.repository.ProjectRepository;
+import com.stw.sourceme.tag.entity.Tag;
+import com.stw.sourceme.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final TagRepository tagRepository;
 
     public List<ProjectListResponse> getAllProjects() {
         return projectRepository.findAll().stream()
@@ -42,7 +46,13 @@ public class ProjectService {
             throw new BusinessException(ErrorCode.PROJECT_SLUG_ALREADY_EXISTS);
         }
 
-        Project project = projectRepository.save(request.toEntity());
+        Project project = request.toEntity();
+        if (request.getTagNames() != null && !request.getTagNames().isEmpty()) {
+            List<Tag> tags = getOrCreateTags(request.getTagNames());
+            project.updateTags(tags);
+        }
+
+        project = projectRepository.save(project);
         return ProjectResponse.from(project);
     }
 
@@ -71,6 +81,11 @@ public class ProjectService {
                 request.getDemoUrl()
         );
 
+        if (request.getTagNames() != null) {
+            List<Tag> tags = getOrCreateTags(request.getTagNames());
+            project.updateTags(tags);
+        }
+
         return ProjectResponse.from(project);
     }
 
@@ -79,5 +94,18 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROJECT_NOT_FOUND));
         projectRepository.delete(project);
+    }
+
+    private List<Tag> getOrCreateTags(List<String> tagNames) {
+        List<Tag> tags = new ArrayList<>();
+        for (String tagName : tagNames) {
+            String trimmedName = tagName.trim();
+            if (!trimmedName.isEmpty()) {
+                Tag tag = tagRepository.findByName(trimmedName)
+                        .orElseGet(() -> tagRepository.save(Tag.builder().name(trimmedName).build()));
+                tags.add(tag);
+            }
+        }
+        return tags;
     }
 }

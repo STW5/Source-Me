@@ -1,10 +1,13 @@
 package com.stw.sourceme.project.controller.dto;
 
 import com.stw.sourceme.project.entity.Project;
+import com.stw.sourceme.tag.controller.dto.TagResponse;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -21,6 +24,7 @@ public class ProjectResponse {
     private Integer featuredOrder;
     private String githubUrl;
     private String demoUrl;
+    private List<TagResponse> tags;
 
     public static ProjectResponse from(Project project) {
         return ProjectResponse.builder()
@@ -36,6 +40,9 @@ public class ProjectResponse {
                 .featuredOrder(project.getFeaturedOrder())
                 .githubUrl(project.getGithubUrl())
                 .demoUrl(project.getDemoUrl())
+                .tags(project.getTags().stream()
+                        .map(TagResponse::from)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

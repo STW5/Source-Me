@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -43,6 +45,8 @@ public class ProjectCreateRequest {
 
     @Size(max = 255, message = "Demo URL은 255자 이하여야 합니다.")
     private String demoUrl;
+
+    private List<String> tagNames = new ArrayList<>();
 
     public Project toEntity() {
         return Project.builder()
