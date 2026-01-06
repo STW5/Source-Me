@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "blog_post_tag")
@@ -32,7 +33,7 @@ public class BlogPostTag {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class BlogPostTagId implements Serializable {
         @Column(name = "blog_post_id")
-        private Long blogPostId;
+        private UUID blogPostId;
 
         @Column(name = "tag_id")
         private Long tagId;
