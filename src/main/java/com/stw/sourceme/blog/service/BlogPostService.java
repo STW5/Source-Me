@@ -8,6 +8,8 @@ import com.stw.sourceme.blog.entity.BlogPost;
 import com.stw.sourceme.blog.repository.BlogPostRepository;
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
+import com.stw.sourceme.tag.entity.Tag;
+import com.stw.sourceme.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class BlogPostService {
 
     private final BlogPostRepository blogPostRepository;
+    private final TagRepository tagRepository;
 
     // 공개된 게시글만 조회 (public endpoint용)
     public List<BlogPostListResponse> getAllPublishedPosts() {
@@ -48,7 +51,15 @@ public class BlogPostService {
     // 게시글 생성
     @Transactional
     public BlogPostResponse createPost(BlogPostCreateRequest request) {
-        BlogPost blogPost = blogPostRepository.save(request.toEntity());
+        BlogPost blogPost = request.toEntity();
+
+        // 태그 연결
+        if (request.getTagIds() != null && !request.getTagIds().isEmpty()) {
+            List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+            blogPost.updateTags(tags);
+        }
+
+        blogPost = blogPostRepository.save(blogPost);
         return BlogPostResponse.from(blogPost);
     }
 
@@ -64,6 +75,12 @@ public class BlogPostService {
                 request.getContentMarkdown(),
                 request.getStatus()
         );
+
+        // 태그 업데이트
+        if (request.getTagIds() != null) {
+            List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+            blogPost.updateTags(tags);
+        }
 
         return BlogPostResponse.from(blogPost);
     }

@@ -1,12 +1,15 @@
 package com.stw.sourceme.blog.controller.dto;
 
 import com.stw.sourceme.blog.entity.BlogPost;
+import com.stw.sourceme.tag.controller.dto.TagResponse;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -19,6 +22,7 @@ public class BlogPostResponse {
     private OffsetDateTime publishedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<TagResponse> tags;
 
     public static BlogPostResponse from(BlogPost blogPost) {
         return BlogPostResponse.builder()
@@ -30,6 +34,9 @@ public class BlogPostResponse {
                 .publishedAt(blogPost.getPublishedAt())
                 .createdAt(blogPost.getCreatedAt())
                 .updatedAt(blogPost.getUpdatedAt())
+                .tags(blogPost.getTags().stream()
+                        .map(TagResponse::from)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

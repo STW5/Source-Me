@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class BlogPostCreateRequest {
@@ -23,6 +26,8 @@ public class BlogPostCreateRequest {
     @NotBlank(message = "상태는 필수입니다.")
     @Size(max = 20, message = "상태는 20자 이하여야 합니다.")
     private String status; // DRAFT or PUBLISHED
+
+    private List<Long> tagIds = new ArrayList<>();
 
     public BlogPost toEntity() {
         return BlogPost.builder()

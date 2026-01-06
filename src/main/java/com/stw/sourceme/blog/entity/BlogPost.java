@@ -2,10 +2,13 @@ package com.stw.sourceme.blog.entity;
 
 import com.stw.sourceme.common.BaseEntity;
 import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +42,15 @@ public class BlogPost extends BaseEntity {
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
 
+    @ManyToMany
+    @JoinTable(
+            name = "blog_post_tag",
+            joinColumns = @JoinColumn(name = "blog_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @Builder.Default
+    private List<Tag> tags = new ArrayList<>();
+
     public void update(String title, String summary, String contentMarkdown, String status) {
         this.title = title;
         this.summary = summary;
@@ -47,5 +59,10 @@ public class BlogPost extends BaseEntity {
         if ("PUBLISHED".equals(status) && this.publishedAt == null) {
             this.publishedAt = OffsetDateTime.now();
         }
+    }
+
+    public void updateTags(List<Tag> tags) {
+        this.tags.clear();
+        this.tags.addAll(tags);
     }
 }
