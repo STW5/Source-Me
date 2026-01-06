@@ -22,6 +22,10 @@ public enum ErrorCode {
     // BlogPost
     BLOG_POST_NOT_FOUND("BLOG_001", "블로그 게시글을 찾을 수 없습니다."),
 
+    // Tag
+    TAG_NOT_FOUND("TAG_001", "태그를 찾을 수 없습니다."),
+    TAG_NAME_ALREADY_EXISTS("TAG_002", "이미 존재하는 태그명입니다."),
+
     // Auth
     INVALID_CREDENTIALS("AUTH_001", "아이디 또는 비밀번호가 올바르지 않습니다."),
     USER_DISABLED("AUTH_002", "비활성화된 계정입니다."),

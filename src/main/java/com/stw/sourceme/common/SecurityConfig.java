@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/profile").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects", "/api/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/posts", "/api/blog/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/tags", "/api/tags/**").permitAll()
 
                         // Protected endpoints (require authentication)
                         .requestMatchers(HttpMethod.POST, "/api/v1/projects").authenticated()
@@ -48,6 +49,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/blog/posts/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/posts/**").authenticated()
                         .requestMatchers("/api/blog/admin/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/tags").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/tags/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/tags/**").authenticated()
 
                         .anyRequest().authenticated()
                 )
