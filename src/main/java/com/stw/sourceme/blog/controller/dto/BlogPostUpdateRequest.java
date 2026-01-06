@@ -13,10 +13,6 @@ public class BlogPostUpdateRequest {
     @Size(max = 200, message = "제목은 200자 이하여야 합니다.")
     private String title;
 
-    @NotBlank(message = "슬러그는 필수입니다.")
-    @Size(max = 220, message = "슬러그는 220자 이하여야 합니다.")
-    private String slug;
-
     @Size(max = 300, message = "요약은 300자 이하여야 합니다.")
     private String summary;
 

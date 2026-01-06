@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -34,16 +35,9 @@ public class BlogPostController {
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 
-    // Slug로 게시글 조회 (public)
-    @GetMapping("/posts/slug/{slug}")
-    public ResponseEntity<ApiResponse<BlogPostResponse>> getPostBySlug(@PathVariable String slug) {
-        BlogPostResponse post = blogPostService.getPostBySlug(slug);
-        return ResponseEntity.ok(ApiResponse.success(post));
-    }
-
     // ID로 게시글 조회
     @GetMapping("/posts/{id}")
-    public ResponseEntity<ApiResponse<BlogPostResponse>> getPostById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<BlogPostResponse>> getPostById(@PathVariable UUID id) {
         BlogPostResponse post = blogPostService.getPostById(id);
         return ResponseEntity.ok(ApiResponse.success(post));
     }
@@ -59,7 +53,7 @@ public class BlogPostController {
     // 게시글 수정 (관리자용)
     @PutMapping("/posts/{id}")
     public ResponseEntity<ApiResponse<BlogPostResponse>> updatePost(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @Valid @RequestBody BlogPostUpdateRequest request) {
         BlogPostResponse post = blogPostService.updatePost(id, request);
         return ResponseEntity.ok(ApiResponse.success(post));
@@ -67,7 +61,7 @@ public class BlogPostController {
 
     // 게시글 삭제 (관리자용)
     @DeleteMapping("/posts/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable UUID id) {
         blogPostService.deletePost(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "blog_post")
@@ -16,14 +17,11 @@ import java.time.OffsetDateTime;
 public class BlogPost extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, length = 200)
     private String title;
-
-    @Column(nullable = false, unique = true, length = 220)
-    private String slug;
 
     @Column(length = 300)
     private String summary;
@@ -41,9 +39,8 @@ public class BlogPost extends BaseEntity {
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
 
-    public void update(String title, String slug, String summary, String contentMarkdown, String status) {
+    public void update(String title, String summary, String contentMarkdown, String status) {
         this.title = title;
-        this.slug = slug;
         this.summary = summary;
         this.contentMarkdown = contentMarkdown;
         this.status = status;

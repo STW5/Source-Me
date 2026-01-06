@@ -6,7 +6,6 @@ import com.stw.sourceme.blog.controller.dto.BlogPostResponse;
 import com.stw.sourceme.blog.controller.dto.BlogPostUpdateRequest;
 import com.stw.sourceme.blog.entity.BlogPost;
 import com.stw.sourceme.blog.repository.BlogPostRepository;
-import com.stw.sourceme.common.exception.BusinessException;
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,15 +39,8 @@ public class BlogPostService {
     }
 
     // ID로 조회
-    public BlogPostResponse getPostById(Long id) {
+    public BlogPostResponse getPostById(UUID id) {
         BlogPost blogPost = blogPostRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
-        return BlogPostResponse.from(blogPost);
-    }
-
-    // Slug로 조회 (public endpoint용)
-    public BlogPostResponse getPostBySlug(String slug) {
-        BlogPost blogPost = blogPostRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
         return BlogPostResponse.from(blogPost);
     }
@@ -55,29 +48,18 @@ public class BlogPostService {
     // 게시글 생성
     @Transactional
     public BlogPostResponse createPost(BlogPostCreateRequest request) {
-        if (blogPostRepository.existsBySlug(request.getSlug())) {
-            throw new BusinessException(ErrorCode.BLOG_POST_SLUG_ALREADY_EXISTS);
-        }
-
         BlogPost blogPost = blogPostRepository.save(request.toEntity());
         return BlogPostResponse.from(blogPost);
     }
 
     // 게시글 수정
     @Transactional
-    public BlogPostResponse updatePost(Long id, BlogPostUpdateRequest request) {
+    public BlogPostResponse updatePost(UUID id, BlogPostUpdateRequest request) {
         BlogPost blogPost = blogPostRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
 
-        // 슬러그 중복 체크 (현재 게시글 제외)
-        if (!blogPost.getSlug().equals(request.getSlug()) &&
-            blogPostRepository.existsBySlug(request.getSlug())) {
-            throw new BusinessException(ErrorCode.BLOG_POST_SLUG_ALREADY_EXISTS);
-        }
-
         blogPost.update(
                 request.getTitle(),
-                request.getSlug(),
                 request.getSummary(),
                 request.getContentMarkdown(),
                 request.getStatus()
@@ -88,7 +70,7 @@ public class BlogPostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long id) {
+    public void deletePost(UUID id) {
         BlogPost blogPost = blogPostRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
         blogPostRepository.delete(blogPost);

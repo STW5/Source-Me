@@ -6,13 +6,13 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Getter
 @Builder
 public class BlogPostResponse {
-    private Long id;
+    private UUID id;
     private String title;
-    private String slug;
     private String summary;
     private String contentMarkdown;
     private String status;
@@ -24,7 +24,6 @@ public class BlogPostResponse {
         return BlogPostResponse.builder()
                 .id(blogPost.getId())
                 .title(blogPost.getTitle())
-                .slug(blogPost.getSlug())
                 .summary(blogPost.getSummary())
                 .contentMarkdown(blogPost.getContentMarkdown())
                 .status(blogPost.getStatus())

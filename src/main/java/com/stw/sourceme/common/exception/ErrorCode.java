@@ -21,7 +21,6 @@ public enum ErrorCode {
 
     // BlogPost
     BLOG_POST_NOT_FOUND("BLOG_001", "블로그 게시글을 찾을 수 없습니다."),
-    BLOG_POST_SLUG_ALREADY_EXISTS("BLOG_002", "이미 존재하는 슬러그입니다."),
 
     // Auth
     INVALID_CREDENTIALS("AUTH_001", "아이디 또는 비밀번호가 올바르지 않습니다."),
