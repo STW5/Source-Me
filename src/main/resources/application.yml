@@ -35,3 +35,8 @@ spring:
 
 server:
   port: 8081
+
+app:
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+    max-file-size: ${MAX_FILE_SIZE:10485760}

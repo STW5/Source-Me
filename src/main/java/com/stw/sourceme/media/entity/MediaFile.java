@@ -2,6 +2,8 @@ package com.stw.sourceme.media.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +12,9 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "media_file")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MediaFile {
 
     @Id
@@ -18,7 +22,7 @@ public class MediaFile {
     private Long id;
 
     @Column(name = "storage_type", nullable = false, length = 20)
-    private String storageType = "LOCAL";
+    private String storageType;
 
     @Column(name = "file_key", nullable = false, length = 500)
     private String fileKey;
@@ -33,7 +37,7 @@ public class MediaFile {
     private String contentType;
 
     @Column(name = "size_bytes", nullable = false)
-    private Long sizeBytes = 0L;
+    private Long sizeBytes;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;

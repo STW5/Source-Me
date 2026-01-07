@@ -1,6 +1,7 @@
 package com.stw.sourceme.profile.entity;
 
 import com.stw.sourceme.common.BaseEntity;
+import com.stw.sourceme.media.entity.MediaFile;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,10 @@ public class SiteProfile extends BaseEntity {
     @Column(name = "resume_url", length = 255)
     private String resumeUrl;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_media_id", foreignKey = @ForeignKey(name = "fk_profile_media"))
+    private MediaFile profileMedia;
+
     public void update(
             String displayName,
             String headline,
@@ -48,7 +53,8 @@ public class SiteProfile extends BaseEntity {
             String email,
             String githubUrl,
             String linkedinUrl,
-            String resumeUrl
+            String resumeUrl,
+            MediaFile profileMedia
     ) {
         this.displayName = displayName;
         this.headline = headline;
@@ -57,5 +63,6 @@ public class SiteProfile extends BaseEntity {
         this.githubUrl = githubUrl;
         this.linkedinUrl = linkedinUrl;
         this.resumeUrl = resumeUrl;
+        this.profileMedia = profileMedia;
     }
 }

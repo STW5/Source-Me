@@ -1,5 +1,6 @@
 package com.stw.sourceme.profile.controller.dto;
 
+import com.stw.sourceme.media.entity.MediaFile;
 import com.stw.sourceme.profile.entity.SiteProfile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -33,6 +34,8 @@ public class ProfileCreateRequest {
     @Size(max = 255, message = "이력서 URL은 255자 이하여야 합니다.")
     private String resumeUrl;
 
+    private MediaFile profilePicture;
+
     public SiteProfile toEntity() {
         return SiteProfile.builder()
                 .displayName(displayName)
@@ -42,6 +45,7 @@ public class ProfileCreateRequest {
                 .githubUrl(githubUrl)
                 .linkedinUrl(linkedinUrl)
                 .resumeUrl(resumeUrl)
+                .profileMedia(profilePicture)
                 .build();
     }
 }

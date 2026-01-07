@@ -40,12 +40,15 @@ public class Project extends BaseEntity {
     @Column(name = "ended_at")
     private LocalDate endedAt;
 
+    @Builder.Default
     @Column(name = "is_published", nullable = false)
     private Boolean isPublished = true;
 
+    @Builder.Default
     @Column(name = "is_featured", nullable = false)
     private Boolean isFeatured = false;
 
+    @Builder.Default
     @Column(name = "featured_order", nullable = false)
     private Integer featuredOrder = 0;
 

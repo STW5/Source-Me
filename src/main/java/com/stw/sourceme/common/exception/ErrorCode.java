@@ -26,6 +26,13 @@ public enum ErrorCode {
     TAG_NOT_FOUND("TAG_001", "태그를 찾을 수 없습니다."),
     TAG_NAME_ALREADY_EXISTS("TAG_002", "이미 존재하는 태그명입니다."),
 
+    // Media
+    MEDIA_NOT_FOUND("MEDIA_001", "파일을 찾을 수 없습니다."),
+    MEDIA_FILE_TOO_LARGE("MEDIA_002", "파일 크기가 최대 크기를 초과했습니다."),
+    MEDIA_UNSUPPORTED_TYPE("MEDIA_003", "허용되지 않는 파일 타입입니다."),
+    MEDIA_UPLOAD_FAILED("MEDIA_004", "파일 업로드에 실패했습니다."),
+    MEDIA_FILE_EMPTY("MEDIA_005", "파일이 비어있습니다."),
+
     // Auth
     INVALID_CREDENTIALS("AUTH_001", "아이디 또는 비밀번호가 올바르지 않습니다."),
     USER_DISABLED("AUTH_002", "비활성화된 계정입니다."),

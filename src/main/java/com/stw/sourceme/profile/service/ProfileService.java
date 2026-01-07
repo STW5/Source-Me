@@ -41,7 +41,8 @@ public class ProfileService {
                     request.getEmail(),
                     request.getGithubUrl(),
                     request.getLinkedinUrl(),
-                    request.getResumeUrl()
+                    request.getResumeUrl(),
+                    request.getProfilePicture()
             );
         }
 
