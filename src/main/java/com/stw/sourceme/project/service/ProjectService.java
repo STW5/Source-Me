@@ -1,8 +1,18 @@
 package com.stw.sourceme.project.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.stw.sourceme.common.exception.BusinessException;
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
+import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.media.repository.MediaFileRepository;
 import com.stw.sourceme.project.controller.dto.ProjectCreateRequest;
 import com.stw.sourceme.project.controller.dto.ProjectListResponse;
 import com.stw.sourceme.project.controller.dto.ProjectResponse;
@@ -11,14 +21,6 @@ import com.stw.sourceme.project.entity.Project;
 import com.stw.sourceme.project.repository.ProjectRepository;
 import com.stw.sourceme.tag.entity.Tag;
 import com.stw.sourceme.tag.repository.TagRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,6 +28,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final TagRepository tagRepository;
+    private final MediaFileRepository mediaFileRepository;
 
     public List<ProjectListResponse> getAllProjects() {
         return projectRepository.findAll().stream()
@@ -47,6 +50,20 @@ public class ProjectService {
         }
 
         Project project = request.toEntity();
+        project.update(
+                project.getTitle(),
+                project.getSlug(),
+                project.getSummary(),
+                project.getContentMarkdown(),
+                project.getStartedAt(),
+                project.getEndedAt(),
+                project.getIsPublished(),
+                project.getIsFeatured(),
+                project.getFeaturedOrder(),
+                project.getGithubUrl(),
+                project.getDemoUrl(),
+                resolveThumbnailMedia(request.getThumbnailMediaId())
+        );
         if (request.getTagNames() != null && !request.getTagNames().isEmpty()) {
             List<Tag> tags = getOrCreateTags(request.getTagNames());
             project.updateTags(tags);
@@ -78,7 +95,8 @@ public class ProjectService {
                 request.getIsFeatured(),
                 request.getFeaturedOrder() != null ? request.getFeaturedOrder() : 0,
                 request.getGithubUrl(),
-                request.getDemoUrl()
+                request.getDemoUrl(),
+                resolveThumbnailMedia(request.getThumbnailMediaId())
         );
 
         if (request.getTagNames() != null) {
@@ -107,5 +125,13 @@ public class ProjectService {
             }
         }
         return tags;
+    }
+
+    private MediaFile resolveThumbnailMedia(Long thumbnailMediaId) {
+        if (thumbnailMediaId == null) {
+            return null;
+        }
+        return mediaFileRepository.findById(thumbnailMediaId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEDIA_NOT_FOUND));
     }
 }

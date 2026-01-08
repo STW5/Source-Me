@@ -1,14 +1,15 @@
 package com.stw.sourceme.project.controller.dto;
 
-import com.stw.sourceme.project.entity.Project;
-import com.stw.sourceme.tag.controller.dto.TagResponse;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.Builder;
+import lombok.Getter;
+
+import com.stw.sourceme.media.controller.dto.MediaFileResponse;
+import com.stw.sourceme.project.entity.Project;
+import com.stw.sourceme.tag.controller.dto.TagResponse;
 @Getter
 @Builder
 public class ProjectResponse {
@@ -24,6 +25,7 @@ public class ProjectResponse {
     private Integer featuredOrder;
     private String githubUrl;
     private String demoUrl;
+    private MediaFileResponse thumbnailMedia;
     private List<TagResponse> tags;
 
     public static ProjectResponse from(Project project) {
@@ -40,6 +42,7 @@ public class ProjectResponse {
                 .featuredOrder(project.getFeaturedOrder())
                 .githubUrl(project.getGithubUrl())
                 .demoUrl(project.getDemoUrl())
+                .thumbnailMedia(MediaFileResponse.from(project.getThumbnailMedia()))
                 .tags(project.getTags().stream()
                         .map(TagResponse::from)
                         .collect(Collectors.toList()))

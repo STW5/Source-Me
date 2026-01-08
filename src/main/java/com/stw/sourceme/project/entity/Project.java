@@ -73,7 +73,7 @@ public class Project extends BaseEntity {
 
     public void update(String title, String slug, String summary, String contentMarkdown,
                       LocalDate startedAt, LocalDate endedAt, Boolean isPublished, Boolean isFeatured,
-                      Integer featuredOrder, String githubUrl, String demoUrl) {
+                      Integer featuredOrder, String githubUrl, String demoUrl, MediaFile thumbnailMedia) {
         this.title = title;
         this.slug = slug;
         this.summary = summary;
@@ -85,6 +85,7 @@ public class Project extends BaseEntity {
         this.featuredOrder = featuredOrder;
         this.githubUrl = githubUrl;
         this.demoUrl = demoUrl;
+        this.thumbnailMedia = thumbnailMedia;
     }
 
     public void updateTags(List<Tag> tags) {

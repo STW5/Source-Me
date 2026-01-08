@@ -2,13 +2,18 @@ package com.stw.sourceme.profile.service;
 
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.stw.sourceme.common.exception.BusinessException;
+import com.stw.sourceme.common.exception.ErrorCode;
+import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.media.repository.MediaFileRepository;
 import com.stw.sourceme.profile.controller.dto.ProfileCreateRequest;
 import com.stw.sourceme.profile.controller.dto.ProfileResponse;
 import com.stw.sourceme.profile.entity.SiteProfile;
 import com.stw.sourceme.profile.repository.ProfileRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final MediaFileRepository mediaFileRepository;
 
     public ProfileResponse getProfile() {
         SiteProfile profile = profileRepository.findAll().stream()
@@ -31,8 +37,20 @@ public class ProfileService {
                 .findFirst()
                 .orElse(null);
 
+        MediaFile profileMedia = resolveProfileMedia(request.getProfilePictureId());
         if (profile == null) {
-            profile = profileRepository.save(request.toEntity());
+            profile = request.toEntity();
+            profile.update(
+                    request.getDisplayName(),
+                    request.getHeadline(),
+                    request.getBioMarkdown(),
+                    request.getEmail(),
+                    request.getGithubUrl(),
+                    request.getLinkedinUrl(),
+                    request.getResumeUrl(),
+                    profileMedia
+            );
+            profile = profileRepository.save(profile);
         } else {
             profile.update(
                     request.getDisplayName(),
@@ -42,10 +60,18 @@ public class ProfileService {
                     request.getGithubUrl(),
                     request.getLinkedinUrl(),
                     request.getResumeUrl(),
-                    request.getProfilePicture()
+                    profileMedia
             );
         }
 
         return ProfileResponse.from(profile);
+    }
+
+    private MediaFile resolveProfileMedia(Long profilePictureId) {
+        if (profilePictureId == null) {
+            return null;
+        }
+        return mediaFileRepository.findById(profilePictureId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEDIA_NOT_FOUND));
     }
 }

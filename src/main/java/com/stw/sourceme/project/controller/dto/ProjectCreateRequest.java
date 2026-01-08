@@ -1,16 +1,16 @@
 package com.stw.sourceme.project.controller.dto;
 
-import com.stw.sourceme.project.entity.Project;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.stw.sourceme.project.entity.Project;
 @Getter
 @NoArgsConstructor
 public class ProjectCreateRequest {
@@ -45,6 +45,8 @@ public class ProjectCreateRequest {
 
     @Size(max = 255, message = "Demo URL은 255자 이하여야 합니다.")
     private String demoUrl;
+
+    private Long thumbnailMediaId;
 
     private List<String> tagNames = new ArrayList<>();
 
