@@ -11,6 +11,8 @@ import com.stw.sourceme.common.exception.ResourceNotFoundException;
 import com.stw.sourceme.tag.entity.Tag;
 import com.stw.sourceme.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +57,28 @@ public class BlogPostService {
         return blogPostRepository.findByTagName(tagName).stream()
                 .map(BlogPostListResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 블로그 포스트 검색 (페이징 지원)
+     * @param keyword 검색 키워드 (null 또는 빈 문자열이면 전체 조회)
+     * @param pageable 페이징 정보
+     * @return 검색된 공개 블로그 포스트 페이지
+     */
+    public Page<BlogPostListResponse> searchPublishedPosts(String keyword, Pageable pageable) {
+        Page<BlogPost> postPage = blogPostRepository.searchPublishedBlogPosts(keyword, pageable);
+        return postPage.map(BlogPostListResponse::from);
+    }
+
+    /**
+     * 모든 블로그 포스트 검색 (관리자용, 페이징 지원)
+     * @param keyword 검색 키워드 (null 또는 빈 문자열이면 전체 조회)
+     * @param pageable 페이징 정보
+     * @return 검색된 모든 블로그 포스트 페이지
+     */
+    public Page<BlogPostListResponse> searchAllPosts(String keyword, Pageable pageable) {
+        Page<BlogPost> postPage = blogPostRepository.searchBlogPosts(keyword, pageable);
+        return postPage.map(BlogPostListResponse::from);
     }
 
     // ID로 조회

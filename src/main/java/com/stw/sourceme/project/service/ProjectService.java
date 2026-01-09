@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,28 @@ public class ProjectService {
                 .filter(Project::getIsPublished)
                 .map(ProjectListResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 프로젝트 검색 (페이징 지원)
+     * @param keyword 검색 키워드 (null 또는 빈 문자열이면 전체 조회)
+     * @param pageable 페이징 정보
+     * @return 검색된 공개 프로젝트 페이지
+     */
+    public Page<ProjectListResponse> searchPublishedProjects(String keyword, Pageable pageable) {
+        Page<Project> projectPage = projectRepository.searchPublishedProjects(keyword, pageable);
+        return projectPage.map(ProjectListResponse::from);
+    }
+
+    /**
+     * 모든 프로젝트 검색 (관리자용, 페이징 지원)
+     * @param keyword 검색 키워드 (null 또는 빈 문자열이면 전체 조회)
+     * @param pageable 페이징 정보
+     * @return 검색된 모든 프로젝트 페이지
+     */
+    public Page<ProjectListResponse> searchAllProjects(String keyword, Pageable pageable) {
+        Page<Project> projectPage = projectRepository.searchProjects(keyword, pageable);
+        return projectPage.map(ProjectListResponse::from);
     }
 
     public ProjectResponse getProjectById(Long id) {

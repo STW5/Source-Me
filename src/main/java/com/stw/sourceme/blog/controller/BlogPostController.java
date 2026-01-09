@@ -8,6 +8,10 @@ import com.stw.sourceme.blog.service.BlogPostService;
 import com.stw.sourceme.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +35,32 @@ public class BlogPostController {
         } else {
             posts = blogPostService.getAllPublishedPosts();
         }
+        return ResponseEntity.ok(ApiResponse.success(posts));
+    }
+
+    /**
+     * 블로그 포스트 검색 API (페이징 지원)
+     * @param keyword 검색 키워드 (제목, 요약, 내용, 태그에서 검색)
+     * @param page 페이지 번호 (0부터 시작, 기본값: 0)
+     * @param size 페이지 크기 (기본값: 10)
+     * @param sortBy 정렬 기준 (기본값: createdAt)
+     * @param sortDir 정렬 방향 (asc/desc, 기본값: desc)
+     * @return 검색된 블로그 포스트 페이지
+     */
+    @GetMapping("/posts/search")
+    public ResponseEntity<ApiResponse<Page<BlogPostListResponse>>> searchPosts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BlogPostListResponse> posts = blogPostService.searchPublishedPosts(keyword, pageable);
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 
