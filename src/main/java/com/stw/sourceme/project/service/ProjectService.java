@@ -67,6 +67,26 @@ public class ProjectService {
         return ProjectResponse.from(project);
     }
 
+    // 조회수 증가
+    @Transactional
+    public void incrementViewCount(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROJECT_NOT_FOUND));
+        project.incrementViewCount();
+    }
+
+    // 인기 프로젝트 조회 (조회수 기준)
+    public Page<ProjectListResponse> getPopularProjects(Pageable pageable) {
+        Page<Project> projectPage = projectRepository.findPopularPublishedProjects(pageable);
+        return projectPage.map(ProjectListResponse::from);
+    }
+
+    // 좋아요가 많은 프로젝트 조회
+    public Page<ProjectListResponse> getMostLikedProjects(Pageable pageable) {
+        Page<Project> projectPage = projectRepository.findMostLikedPublishedProjects(pageable);
+        return projectPage.map(ProjectListResponse::from);
+    }
+
     @Transactional
     public ProjectResponse createProject(ProjectCreateRequest request) {
         if (projectRepository.existsBySlug(request.getSlug())) {

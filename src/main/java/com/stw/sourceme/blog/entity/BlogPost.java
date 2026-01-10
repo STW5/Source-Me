@@ -42,6 +42,14 @@ public class BlogPost extends BaseEntity {
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
 
+    @Builder.Default
+    @Column(name = "view_count", nullable = false)
+    private Long viewCount = 0L;
+
+    @Builder.Default
+    @Column(name = "like_count", nullable = false)
+    private Long likeCount = 0L;
+
     @ManyToMany
     @JoinTable(
             name = "blog_post_tag",
@@ -64,5 +72,19 @@ public class BlogPost extends BaseEntity {
     public void updateTags(List<Tag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 }

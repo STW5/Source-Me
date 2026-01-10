@@ -81,11 +81,31 @@ public class BlogPostService {
         return postPage.map(BlogPostListResponse::from);
     }
 
-    // ID로 조회
+    // ID로 조회 (조회수 증가 안함)
     public BlogPostResponse getPostById(UUID id) {
         BlogPost blogPost = blogPostRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
         return BlogPostResponse.from(blogPost);
+    }
+
+    // 조회수 증가
+    @Transactional
+    public void incrementViewCount(UUID id) {
+        BlogPost blogPost = blogPostRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
+        blogPost.incrementViewCount();
+    }
+
+    // 인기 게시글 조회 (조회수 기준)
+    public Page<BlogPostListResponse> getPopularPosts(Pageable pageable) {
+        Page<BlogPost> postPage = blogPostRepository.findPopularPublishedPosts(pageable);
+        return postPage.map(BlogPostListResponse::from);
+    }
+
+    // 좋아요가 많은 게시글 조회
+    public Page<BlogPostListResponse> getMostLikedPosts(Pageable pageable) {
+        Page<BlogPost> postPage = blogPostRepository.findMostLikedPublishedPosts(pageable);
+        return postPage.map(BlogPostListResponse::from);
     }
 
     // 게시글 생성

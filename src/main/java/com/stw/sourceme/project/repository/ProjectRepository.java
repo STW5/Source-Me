@@ -45,4 +45,16 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
            "LOWER(p.summary) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Project> searchPublishedProjects(@Param("keyword") String keyword, Pageable pageable);
+
+    /**
+     * 인기 프로젝트 조회 (조회수 기준, 공개된 것만)
+     */
+    @Query("SELECT p FROM Project p WHERE p.isPublished = true ORDER BY p.viewCount DESC, p.createdAt DESC")
+    Page<Project> findPopularPublishedProjects(Pageable pageable);
+
+    /**
+     * 좋아요가 많은 프로젝트 조회 (공개된 것만)
+     */
+    @Query("SELECT p FROM Project p WHERE p.isPublished = true ORDER BY p.likeCount DESC, p.createdAt DESC")
+    Page<Project> findMostLikedPublishedProjects(Pageable pageable);
 }

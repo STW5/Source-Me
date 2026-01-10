@@ -47,4 +47,16 @@ public interface BlogPostRepository extends JpaRepository<BlogPost, UUID> {
            "LOWER(bp.contentMarkdown) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<BlogPost> searchPublishedBlogPosts(@Param("keyword") String keyword, Pageable pageable);
+
+    /**
+     * 인기 게시글 조회 (조회수 기준, 공개된 것만)
+     */
+    @Query("SELECT bp FROM BlogPost bp WHERE bp.status = 'PUBLISHED' ORDER BY bp.viewCount DESC, bp.publishedAt DESC")
+    Page<BlogPost> findPopularPublishedPosts(Pageable pageable);
+
+    /**
+     * 최근 인기 게시글 조회 (좋아요 수 기준, 공개된 것만)
+     */
+    @Query("SELECT bp FROM BlogPost bp WHERE bp.status = 'PUBLISHED' ORDER BY bp.likeCount DESC, bp.publishedAt DESC")
+    Page<BlogPost> findMostLikedPublishedPosts(Pageable pageable);
 }

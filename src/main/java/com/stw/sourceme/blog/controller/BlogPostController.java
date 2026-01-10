@@ -64,6 +64,36 @@ public class BlogPostController {
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 
+    /**
+     * 인기 게시글 조회 (조회수 기준)
+     * @param page 페이지 번호 (0부터 시작, 기본값: 0)
+     * @param size 페이지 크기 (기본값: 10)
+     * @return 조회수가 높은 게시글 목록
+     */
+    @GetMapping("/posts/popular")
+    public ResponseEntity<ApiResponse<Page<BlogPostListResponse>>> getPopularPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BlogPostListResponse> posts = blogPostService.getPopularPosts(pageable);
+        return ResponseEntity.ok(ApiResponse.success(posts));
+    }
+
+    /**
+     * 좋아요가 많은 게시글 조회
+     * @param page 페이지 번호 (0부터 시작, 기본값: 0)
+     * @param size 페이지 크기 (기본값: 10)
+     * @return 좋아요가 많은 게시글 목록
+     */
+    @GetMapping("/posts/most-liked")
+    public ResponseEntity<ApiResponse<Page<BlogPostListResponse>>> getMostLikedPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BlogPostListResponse> posts = blogPostService.getMostLikedPosts(pageable);
+        return ResponseEntity.ok(ApiResponse.success(posts));
+    }
+
     // 모든 게시글 목록 조회 (관리자용)
     @GetMapping("/admin/posts")
     public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getAllPosts(
@@ -82,6 +112,13 @@ public class BlogPostController {
     public ResponseEntity<ApiResponse<BlogPostResponse>> getPostById(@PathVariable UUID id) {
         BlogPostResponse post = blogPostService.getPostById(id);
         return ResponseEntity.ok(ApiResponse.success(post));
+    }
+
+    // 조회수 증가
+    @PostMapping("/posts/{id}/view")
+    public ResponseEntity<ApiResponse<Void>> incrementViewCount(@PathVariable UUID id) {
+        blogPostService.incrementViewCount(id);
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     // 게시글 생성 (관리자용)

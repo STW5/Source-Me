@@ -21,6 +21,8 @@ public class BlogPostListResponse {
     private OffsetDateTime publishedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long viewCount;
+    private Long likeCount;
     private List<TagResponse> tags;
 
     public static BlogPostListResponse from(BlogPost blogPost) {
@@ -32,6 +34,8 @@ public class BlogPostListResponse {
                 .publishedAt(blogPost.getPublishedAt())
                 .createdAt(blogPost.getCreatedAt())
                 .updatedAt(blogPost.getUpdatedAt())
+                .viewCount(blogPost.getViewCount())
+                .likeCount(blogPost.getLikeCount())
                 .tags(blogPost.getTags().stream()
                         .map(TagResponse::from)
                         .collect(Collectors.toList()))
