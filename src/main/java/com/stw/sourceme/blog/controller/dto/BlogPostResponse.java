@@ -1,6 +1,7 @@
 package com.stw.sourceme.blog.controller.dto;
 
 import com.stw.sourceme.blog.entity.BlogPost;
+import com.stw.sourceme.media.controller.dto.MediaFileResponse;
 import com.stw.sourceme.tag.controller.dto.TagResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class BlogPostResponse {
     private Long viewCount;
     private Long likeCount;
     private List<TagResponse> tags;
+    private MediaFileResponse thumbnailMedia;
 
     public static BlogPostResponse from(BlogPost blogPost) {
         return BlogPostResponse.builder()
@@ -41,6 +43,7 @@ public class BlogPostResponse {
                 .tags(blogPost.getTags().stream()
                         .map(TagResponse::from)
                         .collect(Collectors.toList()))
+                .thumbnailMedia(MediaFileResponse.from(blogPost.getThumbnailMedia()))
                 .build();
     }
 }

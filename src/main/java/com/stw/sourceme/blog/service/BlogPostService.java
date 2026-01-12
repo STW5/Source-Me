@@ -6,8 +6,11 @@ import com.stw.sourceme.blog.controller.dto.BlogPostResponse;
 import com.stw.sourceme.blog.controller.dto.BlogPostUpdateRequest;
 import com.stw.sourceme.blog.entity.BlogPost;
 import com.stw.sourceme.blog.repository.BlogPostRepository;
+import com.stw.sourceme.common.exception.BusinessException;
 import com.stw.sourceme.common.exception.ErrorCode;
 import com.stw.sourceme.common.exception.ResourceNotFoundException;
+import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.media.repository.MediaFileRepository;
 import com.stw.sourceme.tag.entity.Tag;
 import com.stw.sourceme.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class BlogPostService {
 
     private final BlogPostRepository blogPostRepository;
     private final TagRepository tagRepository;
+    private final MediaFileRepository mediaFileRepository;
 
     // 공개된 게시글만 조회 (public endpoint용)
     public List<BlogPostListResponse> getAllPublishedPosts() {
@@ -113,6 +117,16 @@ public class BlogPostService {
     public BlogPostResponse createPost(BlogPostCreateRequest request) {
         BlogPost blogPost = request.toEntity();
 
+        // 썸네일 설정
+        MediaFile thumbnailMedia = resolveThumbnailMedia(request.getThumbnailMediaId());
+        blogPost.update(
+                blogPost.getTitle(),
+                blogPost.getSummary(),
+                blogPost.getContentMarkdown(),
+                blogPost.getStatus(),
+                thumbnailMedia
+        );
+
         // 태그 연결 (없으면 자동 생성)
         if (request.getTagNames() != null && !request.getTagNames().isEmpty()) {
             List<Tag> tags = getOrCreateTags(request.getTagNames());
@@ -142,11 +156,15 @@ public class BlogPostService {
         BlogPost blogPost = blogPostRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
 
+        // 썸네일 설정
+        MediaFile thumbnailMedia = resolveThumbnailMedia(request.getThumbnailMediaId());
+
         blogPost.update(
                 request.getTitle(),
                 request.getSummary(),
                 request.getContentMarkdown(),
-                request.getStatus()
+                request.getStatus(),
+                thumbnailMedia
         );
 
         // 태그 업데이트 (없으면 자동 생성)
@@ -164,5 +182,13 @@ public class BlogPostService {
         BlogPost blogPost = blogPostRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.BLOG_POST_NOT_FOUND));
         blogPostRepository.delete(blogPost);
+    }
+
+    private MediaFile resolveThumbnailMedia(Long thumbnailMediaId) {
+        if (thumbnailMediaId == null) {
+            return null;
+        }
+        return mediaFileRepository.findById(thumbnailMediaId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEDIA_NOT_FOUND));
     }
 }

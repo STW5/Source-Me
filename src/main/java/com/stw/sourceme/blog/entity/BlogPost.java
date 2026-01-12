@@ -59,11 +59,12 @@ public class BlogPost extends BaseEntity {
     @Builder.Default
     private List<Tag> tags = new ArrayList<>();
 
-    public void update(String title, String summary, String contentMarkdown, String status) {
+    public void update(String title, String summary, String contentMarkdown, String status, MediaFile thumbnailMedia) {
         this.title = title;
         this.summary = summary;
         this.contentMarkdown = contentMarkdown;
         this.status = status;
+        this.thumbnailMedia = thumbnailMedia;
         if ("PUBLISHED".equals(status) && this.publishedAt == null) {
             this.publishedAt = OffsetDateTime.now();
         }

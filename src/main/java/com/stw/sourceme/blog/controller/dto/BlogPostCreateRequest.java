@@ -27,6 +27,8 @@ public class BlogPostCreateRequest {
     @Size(max = 20, message = "상태는 20자 이하여야 합니다.")
     private String status; // DRAFT or PUBLISHED
 
+    private Long thumbnailMediaId;
+
     private List<String> tagNames = new ArrayList<>();
 
     public BlogPost toEntity() {
