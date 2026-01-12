@@ -44,3 +44,6 @@ postgres_data/
 
 ### MacOS ###
 .DS_Store
+
+### Uploads ###
+uploads/

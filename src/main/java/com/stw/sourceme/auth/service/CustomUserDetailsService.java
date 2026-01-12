@@ -1,5 +1,6 @@
 package com.stw.sourceme.auth.service;
 
+import com.stw.sourceme.auth.dto.CustomUserDetails;
 import com.stw.sourceme.auth.entity.User;
 import com.stw.sourceme.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .disabled(!user.getEnabled())
-                .authorities(new ArrayList<>()) // No roles for now
-                .build();
+        return new CustomUserDetails(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEnabled(),
+                new ArrayList<>() // No roles for now
+        );
     }
 }
