@@ -27,13 +27,22 @@ public class BlogPostController {
 
     // 공개된 게시글 목록 조회 (public)
     @GetMapping("/posts")
-    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getPublishedPosts(
-            @RequestParam(required = false) String tag) {
-        List<BlogPostListResponse> posts;
+    public ResponseEntity<ApiResponse<Page<BlogPostListResponse>>> getPublishedPosts(
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BlogPostListResponse> posts;
         if (tag != null && !tag.isEmpty()) {
-            posts = blogPostService.getPostsByTag(tag);
+            posts = blogPostService.getPostsByTag(tag, pageable);
         } else {
-            posts = blogPostService.getAllPublishedPosts();
+            posts = blogPostService.getAllPublishedPosts(pageable);
         }
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
@@ -96,13 +105,22 @@ public class BlogPostController {
 
     // 모든 게시글 목록 조회 (관리자용)
     @GetMapping("/admin/posts")
-    public ResponseEntity<ApiResponse<List<BlogPostListResponse>>> getAllPosts(
-            @RequestParam(required = false) String tag) {
-        List<BlogPostListResponse> posts;
+    public ResponseEntity<ApiResponse<Page<BlogPostListResponse>>> getAllPosts(
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BlogPostListResponse> posts;
         if (tag != null && !tag.isEmpty()) {
-            posts = blogPostService.getAllPostsByTag(tag);
+            posts = blogPostService.getAllPostsByTag(tag, pageable);
         } else {
-            posts = blogPostService.getAllPosts();
+            posts = blogPostService.getAllPosts(pageable);
         }
         return ResponseEntity.ok(ApiResponse.success(posts));
     }

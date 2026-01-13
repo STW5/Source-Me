@@ -33,34 +33,28 @@ public class BlogPostService {
     private final TagRepository tagRepository;
     private final MediaFileRepository mediaFileRepository;
 
-    // 공개된 게시글만 조회 (public endpoint용)
-    public List<BlogPostListResponse> getAllPublishedPosts() {
-        return blogPostRepository.findAll().stream()
-                .filter(post -> "PUBLISHED".equals(post.getStatus()))
-                .map(BlogPostListResponse::from)
-                .collect(Collectors.toList());
+    // 공개된 게시글만 조회 (public endpoint용, 페이징)
+    public Page<BlogPostListResponse> getAllPublishedPosts(Pageable pageable) {
+        return blogPostRepository.findAllPublishedPosts(pageable)
+                .map(BlogPostListResponse::from);
     }
 
-    // 모든 게시글 조회 (관리자용)
-    public List<BlogPostListResponse> getAllPosts() {
-        return blogPostRepository.findAll().stream()
-                .map(BlogPostListResponse::from)
-                .collect(Collectors.toList());
+    // 모든 게시글 조회 (관리자용, 페이징)
+    public Page<BlogPostListResponse> getAllPosts(Pageable pageable) {
+        return blogPostRepository.findAllPosts(pageable)
+                .map(BlogPostListResponse::from);
     }
 
-    // 태그별 게시글 조회 (public)
-    public List<BlogPostListResponse> getPostsByTag(String tagName) {
-        return blogPostRepository.findByTagName(tagName).stream()
-                .filter(post -> "PUBLISHED".equals(post.getStatus()))
-                .map(BlogPostListResponse::from)
-                .collect(Collectors.toList());
+    // 태그별 게시글 조회 (public, 페이징)
+    public Page<BlogPostListResponse> getPostsByTag(String tagName, Pageable pageable) {
+        return blogPostRepository.findPublishedPostsByTag(tagName, pageable)
+                .map(BlogPostListResponse::from);
     }
 
-    // 태그별 게시글 조회 (관리자용)
-    public List<BlogPostListResponse> getAllPostsByTag(String tagName) {
-        return blogPostRepository.findByTagName(tagName).stream()
-                .map(BlogPostListResponse::from)
-                .collect(Collectors.toList());
+    // 태그별 게시글 조회 (관리자용, 페이징)
+    public Page<BlogPostListResponse> getAllPostsByTag(String tagName, Pageable pageable) {
+        return blogPostRepository.findAllPostsByTag(tagName, pageable)
+                .map(BlogPostListResponse::from);
     }
 
     /**

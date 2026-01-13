@@ -18,6 +18,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     boolean existsBySlug(String slug);
 
     /**
+     * 공개된 프로젝트 조회 (페이징)
+     */
+    @Query("SELECT p FROM Project p WHERE p.isPublished = true ORDER BY p.createdAt DESC")
+    Page<Project> findAllPublishedProjects(Pageable pageable);
+
+    /**
      * 프로젝트 검색 (제목, 요약, 태그 기준)
      * @param keyword 검색 키워드
      * @param pageable 페이징 정보

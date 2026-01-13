@@ -18,6 +18,30 @@ public interface BlogPostRepository extends JpaRepository<BlogPost, UUID> {
     List<BlogPost> findByTagName(@Param("tagName") String tagName);
 
     /**
+     * 공개된 블로그 포스트 조회 (페이징)
+     */
+    @Query("SELECT bp FROM BlogPost bp WHERE bp.status = 'PUBLISHED' ORDER BY bp.publishedAt DESC, bp.createdAt DESC")
+    Page<BlogPost> findAllPublishedPosts(Pageable pageable);
+
+    /**
+     * 모든 블로그 포스트 조회 (페이징, 관리자용)
+     */
+    @Query("SELECT bp FROM BlogPost bp ORDER BY bp.createdAt DESC")
+    Page<BlogPost> findAllPosts(Pageable pageable);
+
+    /**
+     * 태그별 공개 포스트 조회 (페이징)
+     */
+    @Query("SELECT DISTINCT bp FROM BlogPost bp JOIN bp.tags t WHERE t.name = :tagName AND bp.status = 'PUBLISHED' ORDER BY bp.publishedAt DESC")
+    Page<BlogPost> findPublishedPostsByTag(@Param("tagName") String tagName, Pageable pageable);
+
+    /**
+     * 태그별 모든 포스트 조회 (페이징, 관리자용)
+     */
+    @Query("SELECT DISTINCT bp FROM BlogPost bp JOIN bp.tags t WHERE t.name = :tagName ORDER BY bp.createdAt DESC")
+    Page<BlogPost> findAllPostsByTag(@Param("tagName") String tagName, Pageable pageable);
+
+    /**
      * 블로그 포스트 검색 (제목, 요약, 내용, 태그 기준)
      * @param keyword 검색 키워드
      * @param pageable 페이징 정보

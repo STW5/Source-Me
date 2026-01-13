@@ -25,8 +25,17 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProjectListResponse>>> getAllProjects() {
-        List<ProjectListResponse> projects = projectService.getAllProjects();
+    public ResponseEntity<ApiResponse<Page<ProjectListResponse>>> getAllProjects(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<ProjectListResponse> projects = projectService.getAllProjects(pageable);
         return ResponseEntity.ok(ApiResponse.success(projects));
     }
 

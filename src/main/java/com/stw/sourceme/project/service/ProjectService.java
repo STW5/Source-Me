@@ -32,11 +32,9 @@ public class ProjectService {
     private final TagRepository tagRepository;
     private final MediaFileRepository mediaFileRepository;
 
-    public List<ProjectListResponse> getAllProjects() {
-        return projectRepository.findAll().stream()
-                .filter(Project::getIsPublished)
-                .map(ProjectListResponse::from)
-                .collect(Collectors.toList());
+    public Page<ProjectListResponse> getAllProjects(Pageable pageable) {
+        return projectRepository.findAllPublishedProjects(pageable)
+                .map(ProjectListResponse::from);
     }
 
     /**
