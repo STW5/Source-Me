@@ -18,6 +18,12 @@ public class ProfileResponse {
     private String githubUrl;
     private String linkedinUrl;
     private String resumeUrl;
+    private String careerGoal;
+    private String experienceHighlights;
+    private String skillsProficient;
+    private String skillsEducation;
+    private String skillsCanUse;
+    private String backendExperience;
     private MediaFileResponse profileMedia;
 
     public static ProfileResponse from(SiteProfile siteProfile) {
@@ -30,6 +36,12 @@ public class ProfileResponse {
                 .githubUrl(siteProfile.getGithubUrl())
                 .linkedinUrl(siteProfile.getLinkedinUrl())
                 .resumeUrl(siteProfile.getResumeUrl())
+                .careerGoal(siteProfile.getCareerGoal())
+                .experienceHighlights(siteProfile.getExperienceHighlights())
+                .skillsProficient(siteProfile.getSkillsProficient())
+                .skillsEducation(siteProfile.getSkillsEducation())
+                .skillsCanUse(siteProfile.getSkillsCanUse())
+                .backendExperience(siteProfile.getBackendExperience())
                 .profileMedia(MediaFileResponse.from(siteProfile.getProfileMedia()))
                 .build();
     }

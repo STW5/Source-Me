@@ -42,6 +42,24 @@ public class SiteProfile extends BaseEntity {
     @Column(name = "resume_url", length = 255)
     private String resumeUrl;
 
+    @Column(name = "career_goal", columnDefinition = "TEXT")
+    private String careerGoal;
+
+    @Column(name = "experience_highlights", columnDefinition = "TEXT")
+    private String experienceHighlights;
+
+    @Column(name = "skills_proficient", columnDefinition = "TEXT")
+    private String skillsProficient;
+
+    @Column(name = "skills_education", columnDefinition = "TEXT")
+    private String skillsEducation;
+
+    @Column(name = "skills_can_use", columnDefinition = "TEXT")
+    private String skillsCanUse;
+
+    @Column(name = "backend_experience", columnDefinition = "TEXT")
+    private String backendExperience;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_media_id", foreignKey = @ForeignKey(name = "fk_profile_media"))
     private MediaFile profileMedia;
@@ -54,6 +72,12 @@ public class SiteProfile extends BaseEntity {
             String githubUrl,
             String linkedinUrl,
             String resumeUrl,
+            String careerGoal,
+            String experienceHighlights,
+            String skillsProficient,
+            String skillsEducation,
+            String skillsCanUse,
+            String backendExperience,
             MediaFile profileMedia
     ) {
         this.displayName = displayName;
@@ -63,6 +87,12 @@ public class SiteProfile extends BaseEntity {
         this.githubUrl = githubUrl;
         this.linkedinUrl = linkedinUrl;
         this.resumeUrl = resumeUrl;
+        this.careerGoal = careerGoal;
+        this.experienceHighlights = experienceHighlights;
+        this.skillsProficient = skillsProficient;
+        this.skillsEducation = skillsEducation;
+        this.skillsCanUse = skillsCanUse;
+        this.backendExperience = backendExperience;
         this.profileMedia = profileMedia;
     }
 }

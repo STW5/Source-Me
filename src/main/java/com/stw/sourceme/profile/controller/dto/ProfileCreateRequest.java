@@ -33,6 +33,13 @@ public class ProfileCreateRequest {
     @Size(max = 255, message = "이력서 URL은 255자 이하여야 합니다.")
     private String resumeUrl;
 
+    private String careerGoal;
+    private String experienceHighlights;
+    private String skillsProficient;
+    private String skillsEducation;
+    private String skillsCanUse;
+    private String backendExperience;
+
     private Long profilePictureId;
 
     public SiteProfile toEntity() {
@@ -44,6 +51,12 @@ public class ProfileCreateRequest {
                 .githubUrl(githubUrl)
                 .linkedinUrl(linkedinUrl)
                 .resumeUrl(resumeUrl)
+                .careerGoal(careerGoal)
+                .experienceHighlights(experienceHighlights)
+                .skillsProficient(skillsProficient)
+                .skillsEducation(skillsEducation)
+                .skillsCanUse(skillsCanUse)
+                .backendExperience(backendExperience)
                 .profileMedia(null)
                 .build();
     }

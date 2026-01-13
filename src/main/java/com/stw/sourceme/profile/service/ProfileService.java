@@ -48,6 +48,12 @@ public class ProfileService {
                     request.getGithubUrl(),
                     request.getLinkedinUrl(),
                     request.getResumeUrl(),
+                    request.getCareerGoal(),
+                    request.getExperienceHighlights(),
+                    request.getSkillsProficient(),
+                    request.getSkillsEducation(),
+                    request.getSkillsCanUse(),
+                    request.getBackendExperience(),
                     profileMedia
             );
             profile = profileRepository.save(profile);
@@ -60,6 +66,12 @@ public class ProfileService {
                     request.getGithubUrl(),
                     request.getLinkedinUrl(),
                     request.getResumeUrl(),
+                    request.getCareerGoal(),
+                    request.getExperienceHighlights(),
+                    request.getSkillsProficient(),
+                    request.getSkillsEducation(),
+                    request.getSkillsCanUse(),
+                    request.getBackendExperience(),
                     profileMedia
             );
         }
