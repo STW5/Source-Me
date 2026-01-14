@@ -1,4 +1,26 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sourceme-app
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-local}
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sourceme}
+      DB_USERNAME: ${POSTGRES_USER:-sourceme_user}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-sourceme_password}
+      UPLOAD_DIR: ${UPLOAD_DIR:-/app/uploads}
+    ports:
+      - "${APP_PORT:-8081}:8081"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - sourceme-network
+
   postgres:
     image: postgres:16-alpine
     container_name: sourceme-postgres
@@ -23,6 +45,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  uploads:
     driver: local
 
 networks:
