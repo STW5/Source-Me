@@ -1,6 +1,6 @@
 package com.stw.sourceme.common;
 
-import com.stw.sourceme.auth.dto.CustomUserDetails;
+import com.stw.sourceme.auth.application.dto.CustomUserDetails;
 import com.stw.sourceme.common.exception.BusinessException;
 import com.stw.sourceme.common.exception.ErrorCode;
 import org.springframework.security.core.Authentication;

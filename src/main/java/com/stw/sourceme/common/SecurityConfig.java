@@ -1,6 +1,6 @@
 package com.stw.sourceme.common;
 
-import com.stw.sourceme.auth.filter.JwtAuthenticationFilter;
+import com.stw.sourceme.auth.infrastructure.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects", "/api/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media/files/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/posts", "/api/blog/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/blog/posts/*/view").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tags", "/api/tags/**").permitAll()
 
                         // Protected endpoints (require authentication)
