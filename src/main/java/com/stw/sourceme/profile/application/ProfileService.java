@@ -54,7 +54,12 @@ public class ProfileService {
                     request.getSkillsEducation(),
                     request.getSkillsCanUse(),
                     request.getBackendExperience(),
-                    profileMedia
+                    profileMedia,
+                    request.getInternships(),
+                    request.getEducation(),
+                    request.getWorkHistory(),
+                    request.getPublicationsPatents(),
+                    request.getCertificates()
             );
             profile = profileRepository.save(profile);
         } else {
@@ -72,7 +77,12 @@ public class ProfileService {
                     request.getSkillsEducation(),
                     request.getSkillsCanUse(),
                     request.getBackendExperience(),
-                    profileMedia
+                    profileMedia,
+                    request.getInternships(),
+                    request.getEducation(),
+                    request.getWorkHistory(),
+                    request.getPublicationsPatents(),
+                    request.getCertificates()
             );
         }
 
