@@ -1,13 +1,18 @@
 package com.stw.sourceme.profile.entity;
 
 import com.stw.sourceme.common.BaseEntity;
-import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.media.domain.MediaFile;
+import com.stw.sourceme.profile.entity.vo.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Entity
 @Table(name = "profile")
@@ -64,6 +69,26 @@ public class SiteProfile extends BaseEntity {
     @JoinColumn(name = "profile_media_id", foreignKey = @ForeignKey(name = "fk_profile_media"))
     private MediaFile profileMedia;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "internships", columnDefinition = "jsonb")
+    private List<InternshipEntry> internships;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "education", columnDefinition = "jsonb")
+    private List<EducationEntry> education;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "work_history", columnDefinition = "jsonb")
+    private List<WorkHistoryEntry> workHistory;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "publications_patents", columnDefinition = "jsonb")
+    private List<PublicationPatentEntry> publicationsPatents;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "certificates", columnDefinition = "jsonb")
+    private List<CertificateEntry> certificates;
+
     public void update(
             String displayName,
             String headline,
@@ -78,7 +103,12 @@ public class SiteProfile extends BaseEntity {
             String skillsEducation,
             String skillsCanUse,
             String backendExperience,
-            MediaFile profileMedia
+            MediaFile profileMedia,
+            List<InternshipEntry> internships,
+            List<EducationEntry> education,
+            List<WorkHistoryEntry> workHistory,
+            List<PublicationPatentEntry> publicationsPatents,
+            List<CertificateEntry> certificates
     ) {
         this.displayName = displayName;
         this.headline = headline;
@@ -94,5 +124,10 @@ public class SiteProfile extends BaseEntity {
         this.skillsCanUse = skillsCanUse;
         this.backendExperience = backendExperience;
         this.profileMedia = profileMedia;
+        this.internships = internships;
+        this.education = education;
+        this.workHistory = workHistory;
+        this.publicationsPatents = publicationsPatents;
+        this.certificates = certificates;
     }
 }

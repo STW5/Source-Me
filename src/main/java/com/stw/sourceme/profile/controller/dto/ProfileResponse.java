@@ -3,8 +3,11 @@ package com.stw.sourceme.profile.controller.dto;
 import lombok.Builder;
 import lombok.Getter;
 
-import com.stw.sourceme.media.controller.dto.MediaFileResponse;
-import com.stw.sourceme.profile.entity.SiteProfile;
+import com.stw.sourceme.media.presentation.dto.MediaFileResponse;
+import com.stw.sourceme.profile.domain.SiteProfile;
+import com.stw.sourceme.profile.entity.vo.*;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -25,6 +28,11 @@ public class ProfileResponse {
     private String skillsCanUse;
     private String backendExperience;
     private MediaFileResponse profileMedia;
+    private List<InternshipEntry> internships;
+    private List<EducationEntry> education;
+    private List<WorkHistoryEntry> workHistory;
+    private List<PublicationPatentEntry> publicationsPatents;
+    private List<CertificateEntry> certificates;
 
     public static ProfileResponse from(SiteProfile siteProfile) {
         return ProfileResponse.builder()
@@ -43,6 +51,11 @@ public class ProfileResponse {
                 .skillsCanUse(siteProfile.getSkillsCanUse())
                 .backendExperience(siteProfile.getBackendExperience())
                 .profileMedia(MediaFileResponse.from(siteProfile.getProfileMedia()))
+                .internships(siteProfile.getInternships())
+                .education(siteProfile.getEducation())
+                .workHistory(siteProfile.getWorkHistory())
+                .publicationsPatents(siteProfile.getPublicationsPatents())
+                .certificates(siteProfile.getCertificates())
                 .build();
     }
 }

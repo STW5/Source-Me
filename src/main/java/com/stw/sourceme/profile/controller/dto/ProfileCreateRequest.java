@@ -1,10 +1,13 @@
 package com.stw.sourceme.profile.controller.dto;
 
-import com.stw.sourceme.profile.entity.SiteProfile;
+import com.stw.sourceme.profile.domain.SiteProfile;
+import com.stw.sourceme.profile.entity.vo.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -42,6 +45,12 @@ public class ProfileCreateRequest {
 
     private Long profilePictureId;
 
+    private List<InternshipEntry> internships;
+    private List<EducationEntry> education;
+    private List<WorkHistoryEntry> workHistory;
+    private List<PublicationPatentEntry> publicationsPatents;
+    private List<CertificateEntry> certificates;
+
     public SiteProfile toEntity() {
         return SiteProfile.builder()
                 .displayName(displayName)
@@ -58,6 +67,11 @@ public class ProfileCreateRequest {
                 .skillsCanUse(skillsCanUse)
                 .backendExperience(backendExperience)
                 .profileMedia(null)
+                .internships(internships)
+                .education(education)
+                .workHistory(workHistory)
+                .publicationsPatents(publicationsPatents)
+                .certificates(certificates)
                 .build();
     }
 }
