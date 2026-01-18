@@ -1,27 +1,29 @@
 package com.stw.sourceme.profile.controller.dto;
 
+
 import com.stw.sourceme.profile.domain.SiteProfile;
 import com.stw.sourceme.profile.entity.vo.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
+
+
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+import com.stw.sourceme.profile.domain.SiteProfile;
+import com.stw.sourceme.profile.domain.vo.*;
 @Getter
 @NoArgsConstructor
 public class ProfileCreateRequest {
 
-    @NotBlank(message = "이름은 필수입니다.")
     @Size(max = 100, message = "이름은 100자 이하여야 합니다.")
     private String displayName;
 
-    @NotBlank(message = "한 줄 소개는 필수입니다.")
     @Size(max = 200, message = "한 줄 소개는 200자 이하여야 합니다.")
     private String headline;
 
-    @NotBlank(message = "소개 본문은 필수입니다.")
     private String bioMarkdown;
 
     @Size(max = 120, message = "이메일은 120자 이하여야 합니다.")
