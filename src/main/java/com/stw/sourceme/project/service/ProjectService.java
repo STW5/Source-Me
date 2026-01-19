@@ -87,11 +87,51 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse createProject(ProjectCreateRequest request) {
-        if (projectRepository.existsBySlug(request.getSlug())) {
+        validateSlugUniqueness(request.getSlug(), null);
+
+        Project project = buildProjectFromRequest(request);
+        updateProjectTags(project, request.getTagNames());
+
+        project = projectRepository.save(project);
+        return ProjectResponse.from(project);
+    }
+
+    @Transactional
+    public ProjectResponse updateProject(Long id, ProjectUpdateRequest request) {
+        Project project = findProjectById(id);
+        validateSlugUniqueness(request.getSlug(), project.getSlug());
+
+        updateProjectFromRequest(project, request);
+        updateProjectTags(project, request.getTagNames());
+
+        return ProjectResponse.from(project);
+    }
+
+    @Transactional
+    public void deleteProject(Long id) {
+        Project project = findProjectById(id);
+        projectRepository.delete(project);
+    }
+
+    private Project findProjectById(Long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROJECT_NOT_FOUND));
+    }
+
+    private void validateSlugUniqueness(String newSlug, String currentSlug) {
+        if (currentSlug == null) {
+            if (projectRepository.existsBySlug(newSlug)) {
+                throw new BusinessException(ErrorCode.PROJECT_SLUG_ALREADY_EXISTS);
+            }
+        } else if (!currentSlug.equals(newSlug) && projectRepository.existsBySlug(newSlug)) {
             throw new BusinessException(ErrorCode.PROJECT_SLUG_ALREADY_EXISTS);
         }
+    }
 
+    private Project buildProjectFromRequest(ProjectCreateRequest request) {
         Project project = request.toEntity();
+        MediaFile thumbnailMedia = resolveThumbnailMedia(request.getThumbnailMediaId());
+
         project.update(
                 project.getTitle(),
                 project.getSlug(),
@@ -104,27 +144,21 @@ public class ProjectService {
                 project.getFeaturedOrder(),
                 project.getGithubUrl(),
                 project.getDemoUrl(),
-                resolveThumbnailMedia(request.getThumbnailMediaId())
+                project.getTeamSize(),
+                project.getRole(),
+                project.getOwnedServices(),
+                project.getIntroductionMarkdown(),
+                project.getResponsibilitiesMarkdown(),
+                project.getTroubleshootingMarkdown(),
+                thumbnailMedia
         );
-        if (request.getTagNames() != null && !request.getTagNames().isEmpty()) {
-            List<Tag> tags = getOrCreateTags(request.getTagNames());
-            project.updateTags(tags);
-        }
 
-        project = projectRepository.save(project);
-        return ProjectResponse.from(project);
+        return project;
     }
 
-    @Transactional
-    public ProjectResponse updateProject(Long id, ProjectUpdateRequest request) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROJECT_NOT_FOUND));
-
-        // Check slug uniqueness (except current project)
-        if (!project.getSlug().equals(request.getSlug()) &&
-            projectRepository.existsBySlug(request.getSlug())) {
-            throw new BusinessException(ErrorCode.PROJECT_SLUG_ALREADY_EXISTS);
-        }
+    private void updateProjectFromRequest(Project project, ProjectUpdateRequest request) {
+        MediaFile thumbnailMedia = resolveThumbnailMedia(request.getThumbnailMediaId());
+        Integer featuredOrder = request.getFeaturedOrder() != null ? request.getFeaturedOrder() : 0;
 
         project.update(
                 request.getTitle(),
@@ -135,38 +169,37 @@ public class ProjectService {
                 request.getEndedAt(),
                 request.getIsPublished(),
                 request.getIsFeatured(),
-                request.getFeaturedOrder() != null ? request.getFeaturedOrder() : 0,
+                featuredOrder,
                 request.getGithubUrl(),
                 request.getDemoUrl(),
-                resolveThumbnailMedia(request.getThumbnailMediaId())
+                request.getTeamSize(),
+                request.getRole(),
+                request.getOwnedServices(),
+                request.getIntroductionMarkdown(),
+                request.getResponsibilitiesMarkdown(),
+                request.getTroubleshootingMarkdown(),
+                thumbnailMedia
         );
-
-        if (request.getTagNames() != null) {
-            List<Tag> tags = getOrCreateTags(request.getTagNames());
-            project.updateTags(tags);
-        }
-
-        return ProjectResponse.from(project);
     }
 
-    @Transactional
-    public void deleteProject(Long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PROJECT_NOT_FOUND));
-        projectRepository.delete(project);
+    private void updateProjectTags(Project project, List<String> tagNames) {
+        if (tagNames != null && !tagNames.isEmpty()) {
+            List<Tag> tags = getOrCreateTags(tagNames);
+            project.updateTags(tags);
+        }
     }
 
     private List<Tag> getOrCreateTags(List<String> tagNames) {
-        List<Tag> tags = new ArrayList<>();
-        for (String tagName : tagNames) {
-            String trimmedName = tagName.trim();
-            if (!trimmedName.isEmpty()) {
-                Tag tag = tagRepository.findByName(trimmedName)
-                        .orElseGet(() -> tagRepository.save(Tag.builder().name(trimmedName).build()));
-                tags.add(tag);
-            }
-        }
-        return tags;
+        return tagNames.stream()
+                .map(String::trim)
+                .filter(name -> !name.isEmpty())
+                .map(this::getOrCreateTag)
+                .collect(Collectors.toList());
+    }
+
+    private Tag getOrCreateTag(String tagName) {
+        return tagRepository.findByName(tagName)
+                .orElseGet(() -> tagRepository.save(Tag.builder().name(tagName).build()));
     }
 
     private MediaFile resolveThumbnailMedia(Long thumbnailMediaId) {

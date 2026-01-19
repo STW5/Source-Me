@@ -1,14 +1,15 @@
 package com.stw.sourceme.project.entity;
 
-import com.stw.sourceme.common.BaseEntity;
-import com.stw.sourceme.media.entity.MediaFile;
-import com.stw.sourceme.tag.entity.Tag;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import com.stw.sourceme.common.BaseEntity;
+import com.stw.sourceme.media.domain.MediaFile;
+import com.stw.sourceme.tag.domain.Tag;
 
 @Entity
 @Table(name = "project")
@@ -58,6 +59,24 @@ public class Project extends BaseEntity {
     @Column(name = "demo_url", length = 255)
     private String demoUrl;
 
+    @Column(name = "team_size", length = 100)
+    private String teamSize;
+
+    @Column(name = "project_role", length = 100)
+    private String role;
+
+    @Column(name = "owned_services", length = 200)
+    private String ownedServices;
+
+    @Column(name = "introduction_markdown", columnDefinition = "TEXT")
+    private String introductionMarkdown;
+
+    @Column(name = "responsibilities_markdown", columnDefinition = "TEXT")
+    private String responsibilitiesMarkdown;
+
+    @Column(name = "troubleshooting_markdown", columnDefinition = "TEXT")
+    private String troubleshootingMarkdown;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
@@ -81,7 +100,9 @@ public class Project extends BaseEntity {
 
     public void update(String title, String slug, String summary, String contentMarkdown,
                       LocalDate startedAt, LocalDate endedAt, Boolean isPublished, Boolean isFeatured,
-                      Integer featuredOrder, String githubUrl, String demoUrl, MediaFile thumbnailMedia) {
+                      Integer featuredOrder, String githubUrl, String demoUrl, String teamSize, String role,
+                      String ownedServices, String introductionMarkdown, String responsibilitiesMarkdown,
+                      String troubleshootingMarkdown, MediaFile thumbnailMedia) {
         this.title = title;
         this.slug = slug;
         this.summary = summary;
@@ -93,6 +114,12 @@ public class Project extends BaseEntity {
         this.featuredOrder = featuredOrder;
         this.githubUrl = githubUrl;
         this.demoUrl = demoUrl;
+        this.teamSize = teamSize;
+        this.role = role;
+        this.ownedServices = ownedServices;
+        this.introductionMarkdown = introductionMarkdown;
+        this.responsibilitiesMarkdown = responsibilitiesMarkdown;
+        this.troubleshootingMarkdown = troubleshootingMarkdown;
         this.thumbnailMedia = thumbnailMedia;
     }
 

@@ -44,6 +44,21 @@ public class ProjectUpdateRequest {
     @Size(max = 255, message = "Demo URL은 255자 이하여야 합니다.")
     private String demoUrl;
 
+    @Size(max = 100, message = "팀 규모는 100자 이하여야 합니다.")
+    private String teamSize;
+
+    @Size(max = 100, message = "역할은 100자 이하여야 합니다.")
+    private String role;
+
+    @Size(max = 200, message = "담당 서비스는 200자 이하여야 합니다.")
+    private String ownedServices;
+
+    private String introductionMarkdown;
+
+    private String responsibilitiesMarkdown;
+
+    private String troubleshootingMarkdown;
+
     private Long thumbnailMediaId;
 
     private List<String> tagNames = new ArrayList<>();

@@ -25,8 +25,6 @@ public class ProjectResponse {
     private Integer featuredOrder;
     private String githubUrl;
     private String demoUrl;
-    private Long viewCount;
-    private Long likeCount;
     private MediaFileResponse thumbnailMedia;
     private List<TagResponse> tags;
 
@@ -44,8 +42,6 @@ public class ProjectResponse {
                 .featuredOrder(project.getFeaturedOrder())
                 .githubUrl(project.getGithubUrl())
                 .demoUrl(project.getDemoUrl())
-                .viewCount(project.getViewCount())
-                .likeCount(project.getLikeCount())
                 .thumbnailMedia(MediaFileResponse.from(project.getThumbnailMedia()))
                 .tags(project.getTags().stream()
                         .map(TagResponse::from)
