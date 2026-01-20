@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd ~/sourceme/Source-Me
-            git pull origin main
+            git pull --rebase origin main
             cd ~/sourceme
             docker compose up -d --build backend
             docker compose ps
