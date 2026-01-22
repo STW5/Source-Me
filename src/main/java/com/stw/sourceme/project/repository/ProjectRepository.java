@@ -19,8 +19,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     /**
      * 공개된 프로젝트 조회 (페이징)
+     * Featured 프로젝트를 featuredOrder 순으로 먼저 표시하고, 나머지는 createdAt 역순으로 정렬
      */
-    @Query("SELECT p FROM Project p WHERE p.isPublished = true ORDER BY p.createdAt DESC")
+    @Query("SELECT p FROM Project p WHERE p.isPublished = true ORDER BY p.isFeatured DESC, p.featuredOrder ASC, p.createdAt DESC")
     Page<Project> findAllPublishedProjects(Pageable pageable);
 
     /**
