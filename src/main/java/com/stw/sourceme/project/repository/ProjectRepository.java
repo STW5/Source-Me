@@ -40,6 +40,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     /**
      * 공개된 프로젝트만 검색
+     * Featured 프로젝트를 featuredOrder 순으로 먼저 표시하고, 나머지는 createdAt 역순으로 정렬
      * @param keyword 검색 키워드
      * @param pageable 페이징 정보
      * @return 검색된 공개 프로젝트 페이지
@@ -50,7 +51,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
            "(:keyword IS NULL OR :keyword = '' OR " +
            "LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(p.summary) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+           "LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+           "ORDER BY p.isFeatured DESC, p.featuredOrder ASC, p.createdAt DESC")
     Page<Project> searchPublishedProjects(@Param("keyword") String keyword, Pageable pageable);
 
     /**
