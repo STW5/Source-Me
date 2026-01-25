@@ -27,6 +27,12 @@ public class ProjectResponse {
     private String demoUrl;
     private MediaFileResponse thumbnailMedia;
     private List<TagResponse> tags;
+    private String teamSize;
+    private String projectRole;
+    private String ownedServices;
+    private String introductionMarkdown;
+    private String responsibilitiesMarkdown;
+    private String troubleshootingMarkdown;
 
     public static ProjectResponse from(Project project) {
         return ProjectResponse.builder()
@@ -46,6 +52,12 @@ public class ProjectResponse {
                 .tags(project.getTags().stream()
                         .map(TagResponse::from)
                         .collect(Collectors.toList()))
+                .teamSize(project.getTeamSize())
+                .projectRole(project.getRole())
+                .ownedServices(project.getOwnedServices())
+                .introductionMarkdown(project.getIntroductionMarkdown())
+                .responsibilitiesMarkdown(project.getResponsibilitiesMarkdown())
+                .troubleshootingMarkdown(project.getTroubleshootingMarkdown())
                 .build();
     }
 }
