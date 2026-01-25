@@ -65,47 +65,10 @@ public class ProjectController {
         return ResponseEntity.ok(ApiResponse.success(projects));
     }
 
-    /**
-     * 인기 프로젝트 조회 (조회수 기준)
-     * @param page 페이지 번호 (0부터 시작, 기본값: 0)
-     * @param size 페이지 크기 (기본값: 10)
-     * @return 조회수가 높은 프로젝트 목록
-     */
-    @GetMapping("/popular")
-    public ResponseEntity<ApiResponse<Page<ProjectListResponse>>> getPopularProjects(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProjectListResponse> projects = projectService.getPopularProjects(pageable);
-        return ResponseEntity.ok(ApiResponse.success(projects));
-    }
-
-    /**
-     * 좋아요가 많은 프로젝트 조회
-     * @param page 페이지 번호 (0부터 시작, 기본값: 0)
-     * @param size 페이지 크기 (기본값: 10)
-     * @return 좋아요가 많은 프로젝트 목록
-     */
-    @GetMapping("/most-liked")
-    public ResponseEntity<ApiResponse<Page<ProjectListResponse>>> getMostLikedProjects(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProjectListResponse> projects = projectService.getMostLikedProjects(pageable);
-        return ResponseEntity.ok(ApiResponse.success(projects));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProjectResponse>> getProjectById(@PathVariable Long id) {
         ProjectResponse project = projectService.getProjectById(id);
         return ResponseEntity.ok(ApiResponse.success(project));
-    }
-
-    // 조회수 증가
-    @PostMapping("/{id}/view")
-    public ResponseEntity<ApiResponse<Void>> incrementViewCount(@PathVariable Long id) {
-        projectService.incrementViewCount(id);
-        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PostMapping

@@ -39,43 +39,47 @@ Source-Me는 개발자들이 자신의 프로젝트와 블로그를 효과적으
 ```
 src/main/java/com/stw/sourceme/
 ├── auth/               # 인증/인가
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   └── presentation/
-├── profile/            # 사용자 프로필
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   └── presentation/
-├── project/            # 프로젝트 관리
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   └── presentation/
+│   ├── controller/     # REST API 컨트롤러
+│   ├── service/        # 비즈니스 로직
+│   ├── entity/         # JPA 엔티티
+│   ├── repository/     # 데이터 접근
+│   ├── filter/         # JWT 필터
+│   └── util/           # 유틸리티
 ├── blog/               # 블로그
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   └── presentation/
+│   ├── controller/
+│   ├── service/
+│   ├── entity/
+│   └── repository/
+├── profile/            # 사용자 프로필
+│   ├── controller/
+│   ├── service/
+│   ├── entity/
+│   │   └── vo/         # Value Objects
+│   └── repository/
+├── project/            # 프로젝트 관리
+│   ├── controller/
+│   ├── service/
+│   ├── entity/
+│   └── repository/
 ├── tag/                # 태그 시스템
-│   ├── domain/
-│   ├── application/
-│   ├── infrastructure/
-│   └── presentation/
-└── media/              # 미디어 파일 관리
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    └── presentation/
+│   ├── controller/
+│   ├── service/
+│   ├── entity/
+│   └── repository/
+├── media/              # 미디어 파일 관리
+│   ├── controller/
+│   ├── service/
+│   ├── entity/
+│   └── repository/
+└── common/             # 공통 (Security, Exception 등)
 ```
 
 ### 레이어 설명
 
-- **Domain**: 비즈니스 로직 및 엔티티
-- **Application**: 서비스 계층 및 비즈니스 로직 조정
-- **Infrastructure**: 데이터베이스, 외부 API 등 인프라 관련 구현
-- **Presentation**: REST API 컨트롤러 및 DTO
+- **Controller**: REST API 엔드포인트 및 요청/응답 DTO 처리
+- **Service**: 비즈니스 로직 및 트랜잭션 관리
+- **Entity**: JPA 엔티티 및 도메인 모델
+- **Repository**: 데이터베이스 접근 (Spring Data JPA)
 
 ## 시작하기
 

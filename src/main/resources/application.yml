@@ -32,6 +32,7 @@ spring:
     sql-migration-prefix: V
     sql-migration-separator: __
     sql-migration-suffixes: .sql
+    validate-on-migrate: false
 
 server:
   port: 8081

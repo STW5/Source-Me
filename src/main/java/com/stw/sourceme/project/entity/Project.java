@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import com.stw.sourceme.common.BaseEntity;
-import com.stw.sourceme.media.domain.MediaFile;
-import com.stw.sourceme.tag.domain.Tag;
+import com.stw.sourceme.media.entity.MediaFile;
+import com.stw.sourceme.tag.entity.Tag;
 
 @Entity
 @Table(name = "project")
@@ -81,14 +81,6 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "thumbnail_media_id")
     private MediaFile thumbnailMedia;
 
-    @Builder.Default
-    @Column(name = "view_count", nullable = false)
-    private Long viewCount = 0L;
-
-    @Builder.Default
-    @Column(name = "like_count", nullable = false)
-    private Long likeCount = 0L;
-
     @ManyToMany
     @JoinTable(
             name = "project_tag",
@@ -126,19 +118,5 @@ public class Project extends BaseEntity {
     public void updateTags(List<Tag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
-    }
-
-    public void incrementViewCount() {
-        this.viewCount++;
-    }
-
-    public void incrementLikeCount() {
-        this.likeCount++;
-    }
-
-    public void decrementLikeCount() {
-        if (this.likeCount > 0) {
-            this.likeCount--;
-        }
     }
 }

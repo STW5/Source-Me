@@ -1,7 +1,7 @@
 package com.stw.sourceme.profile.entity;
 
 import com.stw.sourceme.common.BaseEntity;
-import com.stw.sourceme.media.domain.MediaFile;
+import com.stw.sourceme.media.entity.MediaFile;
 import com.stw.sourceme.profile.entity.vo.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

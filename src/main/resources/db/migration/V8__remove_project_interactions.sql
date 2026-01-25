@@ -1,0 +1,3 @@
+-- Migration already applied on production server (2026-01-15)
+-- This file is a placeholder to maintain Flyway version consistency
+-- The actual migration removed interaction-related columns from the project table

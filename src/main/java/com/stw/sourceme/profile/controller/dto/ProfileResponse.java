@@ -3,8 +3,8 @@ package com.stw.sourceme.profile.controller.dto;
 import lombok.Builder;
 import lombok.Getter;
 
-import com.stw.sourceme.media.presentation.dto.MediaFileResponse;
-import com.stw.sourceme.profile.domain.SiteProfile;
+import com.stw.sourceme.media.controller.dto.MediaFileResponse;
+import com.stw.sourceme.profile.entity.SiteProfile;
 import com.stw.sourceme.profile.entity.vo.*;
 
 import java.util.List;

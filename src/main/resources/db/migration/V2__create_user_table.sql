@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Create index for username lookup
-CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 
 -- Insert default admin user (password: admin123)
 -- BCrypt hash of "admin123"

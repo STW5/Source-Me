@@ -1,19 +1,14 @@
 package com.stw.sourceme.profile.controller.dto;
 
 
-import com.stw.sourceme.profile.domain.SiteProfile;
+import com.stw.sourceme.profile.entity.SiteProfile;
 import com.stw.sourceme.profile.entity.vo.*;
 import jakarta.validation.constraints.NotBlank;
-
-import java.util.List;
-
-
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.stw.sourceme.profile.domain.SiteProfile;
-import com.stw.sourceme.profile.domain.vo.*;
+import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ProfileCreateRequest {
