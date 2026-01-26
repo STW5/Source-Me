@@ -48,7 +48,7 @@ public class ProjectUpdateRequest {
     private String teamSize;
 
     @Size(max = 100, message = "역할은 100자 이하여야 합니다.")
-    private String role;
+    private String projectRole;
 
     @Size(max = 200, message = "담당 서비스는 200자 이하여야 합니다.")
     private String ownedServices;

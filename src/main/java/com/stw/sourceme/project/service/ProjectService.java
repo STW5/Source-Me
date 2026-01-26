@@ -153,7 +153,7 @@ public class ProjectService {
                 request.getGithubUrl(),
                 request.getDemoUrl(),
                 request.getTeamSize(),
-                request.getRole(),
+                request.getProjectRole(),
                 request.getOwnedServices(),
                 request.getIntroductionMarkdown(),
                 request.getResponsibilitiesMarkdown(),
