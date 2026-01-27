@@ -1,3 +1,0 @@
--- Migration already applied on production server (2026-01-17)
--- This file is a placeholder to maintain Flyway version consistency
--- The actual migration inserted sample data for the about sections in the profile
