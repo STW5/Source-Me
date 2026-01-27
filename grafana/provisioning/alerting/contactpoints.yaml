@@ -1,0 +1,20 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: Slack
+    receivers:
+      - uid: slack-sourceme
+        type: slack
+        settings:
+          url: ${SLACK_WEBHOOK_URL}
+          title: "[Source-Me Alert] {{ .GroupLabels.alertname }}"
+          text: |
+            {{ range .Alerts }}
+            **Status**: {{ .Status }}
+            **Summary**: {{ .Annotations.summary }}
+            **Description**: {{ .Annotations.description }}
+            **Value**: {{ .ValueString }}
+            **Time**: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            {{ end }}
+        disableResolveMessage: false
