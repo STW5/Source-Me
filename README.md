@@ -83,60 +83,6 @@ src/main/java/com/stw/sourceme/
 - **Entity**: JPA 엔티티 및 도메인 모델
 - **Repository**: 데이터베이스 접근 (Spring Data JPA)
 
-## 모니터링 시스템
-
-Source-Me는 Prometheus와 Grafana를 활용한 실시간 모니터링 시스템을 제공합니다.
-
-### 모니터링 스택
-
-- **Prometheus**: 메트릭 수집 및 저장
-- **Grafana**: 시각화 대시보드
-- **Spring Boot Actuator**: 애플리케이션 메트릭 제공
-- **PostgreSQL Exporter**: 데이터베이스 메트릭 수집
-- **Node Exporter**: 시스템 메트릭 수집
-
-### 접속 정보
-
-- **Grafana Dashboard**: `http://your-server:3001`
-  - 기본 로그인: `admin / admin` (최초 접속 시 변경 권장)
-- **Prometheus**: `http://your-server:9090`
-
-### 모니터링 메트릭
-
-"Source-Me Application Overview" 대시보드에서 다음 메트릭을 실시간으로 확인할 수 있습니다:
-
-#### 애플리케이션 성능
-- **Application Uptime**: 애플리케이션 가동 시간
-- **Average Response Time**: 평균 API 응답 시간
-- **HTTP Request Rate**: 초당 HTTP 요청 수
-- **HTTP Response Time by Endpoint**: 엔드포인트별 응답 시간 분석
-
-#### JVM 메트릭
-- **JVM Heap Usage**: 힙 메모리 사용률 (게이지)
-- **JVM Memory Usage**: 메모리 영역별 사용량 (Heap/Non-Heap)
-- **JVM Threads**: 활성 스레드 및 데몬 스레드 수
-- **CPU Usage**: 프로세스 CPU 사용률
-
-#### 데이터베이스
-- **Active DB Connections**: 활성 데이터베이스 커넥션 수
-- **Database Connection Pool**: HikariCP 커넥션 풀 상태 (Active/Idle/Total)
-- **PostgreSQL Metrics**: 쿼리 성능, 트랜잭션 통계
-
-#### 시스템 리소스
-- **Disk Usage**: 디스크 사용량
-- **Network I/O**: 네트워크 트래픽
-- **System Load**: 시스템 부하
-
-### 알림 설정 (권장)
-
-프로덕션 환경에서는 다음 임계값에 대한 알림 설정을 권장합니다:
-
-- API 응답 시간 > 2초
-- HTTP 5xx 에러율 > 1%
-- DB 커넥션 풀 사용률 > 80%
-- JVM Heap 메모리 > 85%
-- 디스크 사용량 > 90%
-
 ## 시작하기
 
 ### 사전 요구사항
@@ -288,6 +234,19 @@ Source-Me/
 
 - GitHub: [@stw](https://github.com/stw)
 - Project Link: [https://github.com/stw/Source-Me](https://github.com/stw/Source-Me)
+
+## 모니터링 시스템
+
+Prometheus + Grafana 기반 실시간 모니터링 및 Slack 알림 시스템 구축
+
+### 구성 요소
+- **Prometheus**: 메트릭 수집 (15초 간격)
+- **Grafana**: 시각화 대시보드 (10개 패널, 5초 자동 새로고침)
+- **Slack Alerts**: 6가지 Critical/Warning 알림 규칙 (Application Down, High Response Time, High Memory, High DB Pool, High CPU, HTTP 5xx)
+
+### 접속
+- Grafana: `http://your-server:3001` (admin/admin)
+- Prometheus: `http://your-server:9090`
 
 ## 참고 자료
 
