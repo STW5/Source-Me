@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects", "/api/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media/files/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/posts", "/api/blog/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/blog/posts/*/view").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tags", "/api/tags/**").permitAll()
 
                         // Protected endpoints (require authentication)
