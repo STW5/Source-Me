@@ -52,6 +52,10 @@ management:
     tags:
       application: ${spring.application.name}
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
+
 app:
   upload:
     dir: ${UPLOAD_DIR:uploads}
