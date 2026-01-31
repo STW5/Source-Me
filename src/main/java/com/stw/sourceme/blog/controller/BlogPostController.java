@@ -132,7 +132,7 @@ public class BlogPostController {
         return ResponseEntity.ok(ApiResponse.success(post));
     }
 
-    // 조회수 증가
+    // 조회수 증가 (public - no auth required)
     @PostMapping("/posts/{id}/view")
     public ResponseEntity<ApiResponse<Void>> incrementViewCount(@PathVariable UUID id) {
         blogPostService.incrementViewCount(id);

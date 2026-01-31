@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,18 +43,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/profile", "/api/v1/profiles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects", "/api/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media/files/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/blog/posts", "/api/blog/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/blog/posts/*/view").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/blog/**").permitAll()
+                        .requestMatchers(new RegexRequestMatcher("/api/blog/posts/[^/]+/view", "POST")).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tags", "/api/tags/**").permitAll()
 
                         // Protected endpoints (require authentication)
                         .requestMatchers(HttpMethod.POST, "/api/v1/projects").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/projects/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/**").authenticated()
+                        .requestMatchers("/api/blog/admin/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/blog/posts").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/blog/posts/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/posts/**").authenticated()
-                        .requestMatchers("/api/blog/admin/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/tags").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/tags/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/tags/**").authenticated()
