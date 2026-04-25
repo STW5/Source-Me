@@ -22,9 +22,7 @@ services:
       - sourceme-network
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/stw5/source-me:latest
     container_name: sourceme-backend
     restart: unless-stopped
     environment:
